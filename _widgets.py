@@ -89,12 +89,7 @@ def set_css():
 
   </style>
   '''))
-
-#  .widget-html > .widget-html-content, .jupyter-widgets .jupyter-button, 
-
-    # button {
-    # font-family: 'cmunrm'
-    # }
+}
 
 def fix_colab_outputs():
     cmd = "pip install --upgrade watermark"
@@ -255,17 +250,14 @@ class WidgetBase():
             #     self.rp_matrix.color = self.distances[start_ix:end_ix]
             # else:
 
-       
         with self.rp_plot.hold_sync():
             if self.threshold_by_rr35.value == True:
                 self.rp_matrix.color = rp.recurrence_matrix()
                 self.cs.scheme = "Greys"
-               
                 self.rp_plot.title = "Recurrence Plot"
             else:   
                 self.rp_matrix.color = rp._distance_matrix
                 self.cs.scheme = "plasma"
-              
                 self.rp_plot.title = "Distance Matrix"
 
             self.rp_matrix.x, self.rp_matrix.y = self.domain, self.domain
@@ -287,9 +279,6 @@ class WidgetBase():
         """ Updates RP from generate_rp() based on
         current value of RQA params."""
 
-        # retrieve current time series
-        # ts = self.line.y
-
         # update RP instance
         if self.which_RR.value.split()[0] == "Global":
             rp = RecurrencePlot(self.ts, normalize=self.normalize.value, metric=self.metric.value.lower(), recurrence_rate=self.RR.value, tau=self.tau.value, dim=self.dim.value, silence_level=2)
@@ -298,26 +287,26 @@ class WidgetBase():
 
         self.distances = rp._distance_matrix
         self.R = rp.recurrence_matrix()
+        self.rp_instance = rp
+        self.domain = np.arange(len(self.R))
 
         # plot RP before excluding diagonals
         with self.rp2_plot.hold_sync():
 
             # threshold the RP by recurrence rate
             if self.threshold.value == True:
-                # self.distances = rp.R #recurrence_matrix()
                 self.rp2_plot.title = "Recurrence Plot"
                 self.cs2.scheme = "Greys"
-                # self.rp_matrix2.x, self.rp_matrix2.y = np.arange(len(self.distances)), np.arange(len(self.distances))
                 self.rp_matrix2.color = rp.recurrence_matrix()
 
             # plot unthresholded recurrence plot (i.e. the distance matrix)
             else:
-                # self.distances = rp._distance_matrix
                 self.rp2_plot.title = "Distance Matrix"
                 self.cs2.scheme = "plasma"
-                # self.rp_matrix2.x, self.rp_matrix2.y = np.arange(len(self.distances)), np.arange(len(self.distances))
+                self.c_ax.max = np.max(rp._distance_matrix)
                 self.rp_matrix2.color = rp._distance_matrix
 
+        
         # update RQA
         l_min, v_min = self.lmin.value, self.vmin.value
 
