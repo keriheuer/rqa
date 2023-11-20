@@ -41,6 +41,13 @@ class WidgetPlots():
     def __init__(self):
         self.label = 'WidgetPlots'
 
+    # check if RP was generated
+    def validate(self):
+        if self.rp_plot != None:
+            return True
+        else:
+            return False
+        
     def generate_rps(self):
 
         #  initialize UI with sine wave

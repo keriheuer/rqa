@@ -1,6 +1,6 @@
 import numpy as np
 
-def find_longest_diag(self, array2D, patternlength):
+def find_longest_diag(array2D, patternlength):
     res=[]
     for k in range(-array2D.shape[0]+1, array2D.shape[1]):
         diag=np.diag(array2D, k=k)
@@ -10,7 +10,7 @@ def find_longest_diag(self, array2D, patternlength):
                     res.append((i+abs(k), i) if k<0 else (i, i+abs(k)))
     return res
 
-def find_vmax(self, distances, i, vmax):
+def find_vmax(distances, i, vmax):
   # find start positions of all vertical lines with length = V MAXß
   col = distances[i, :]
   idx_pairs = np.where(np.diff(np.hstack(([False],col==1,[False]))))[0].reshape(-1,2)
@@ -19,7 +19,7 @@ def find_vmax(self, distances, i, vmax):
     return (i, idx_pairs[np.diff(idx_pairs,axis=1).argmax(),0]) # longest island start position
 
 
-def find_lmax(self, array2D, lmax):
+def find_lmax(array2D, lmax):
   # find start position of diagonal with length = L MAX
     res = []
     for k in range(-array2D.shape[0]+1, array2D.shape[1]):
@@ -30,7 +30,7 @@ def find_lmax(self, array2D, lmax):
                     res.append((i + abs(k), i) if k<0 else (i, i + abs(k)))
     return res
 
-def transform_to_area(self, x, y1, y2):
+def transform_to_area(x, y1, y2):
 
     """ Helper function for filling between lines in bqplot figure."""
 
@@ -57,10 +57,3 @@ def exclude_diagonals(self, rp, theiler):
   # by directly accessing the recurrence matrix rp.R
 
   rp.R[mask] = 0
-
-# check if cell generating fig2 was run, i.e. rp_plot is not empty
-def validate(self):
-    if self.rp_plot != None:
-        return True
-    else:
-        return False
