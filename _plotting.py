@@ -119,6 +119,8 @@ class WidgetPlots():
         self.rp_matrix.observe(self.update_rp)
         self.threshold_by_rr35.layout.height = "40px"
         self.threshold_by_rr35.observe(self.update_rp, names=["value"])
+        self.threshold_by_rr35.observe(self.update_rp_colorbar, names=["value"])
+      
     
         # render the figure alongside UI
         display(HBox([VBox([VBox([self.signal, self.ts_ui]), self.ts_plot]), VBox([self.threshold_by_rr35, self.rp_plot], layout=Layout(display="flex", flex_flow="vertical", justify_items="center", align_items="center"))]))
@@ -181,10 +183,9 @@ class WidgetPlots():
             self.which_RR, self.lmin, self.vmin, self.theiler, self.l_max, self.v_max]:
             w.observe(self.update_rp2, type="change")
 
-        for w in [self.tau, self.dim, self.theiler, self.show_theiler]:
+        for w in [self.tau, self.dim, self.theiler]:
             w.observe(self.update_theiler_slider, type="change")
-
-        self.theiler.observe(self.update_theiler, type="change")
+            w.observe(self.update_theiler, names=["value"])
 
         # for w in [self.l_max, self.threshold, self.show_lmax]:
         #     w.observe(self.update_longest_diag, type="change")
@@ -192,7 +193,8 @@ class WidgetPlots():
         # for w in [self.v_max, self.threshold, self.show_vmax]:
         #     w.observe(self.update_vlines, type="change")
 
-
+       # self.threshold.observe(self.update_rp_colorbar, names=["value"])
+      
         # horizontally display RQA UI, RP figure, and RQA stats
         display(HBox([self.rqa_ui, VBox([self.rp2_plot, self.show_rqa_lines]), rqa_stats])) #, layout=Layout(display="flex", overflow="visible",
             # align_items="center", flex_direction="column", justify_items="center")), rqa_stats],
