@@ -93,8 +93,11 @@ class WidgetPlots():
             style=self.style
         )
 
+        
         # turn off bqplot grid
         plt.grids(value="none")
+        plt.axes()['x'].grid_lines = "none"
+        plt.axes()['y'].grid_lines = "none"
 
         # register callbacks by using the 'observe' method
         self.signal.observe(self.update_ts_ui, names=['value'])
