@@ -91,7 +91,6 @@ def set_css():
 
   </style>
   '''))
-}
 
 def fix_colab_outputs():
     cmd = "pip install --upgrade watermark"
