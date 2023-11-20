@@ -34,7 +34,7 @@ import matplotlib as mpl, matplotlib.pyplot as pplt
 from matplotlib_inline.backend_inline import set_matplotlib_formats
 
 
-from ._utils import find_longest_diag, find_vmax, find_lmax, transform_to_area, exclude_diagonals, validate
+from ._utils import find_longest_diag, find_vmax, find_lmax, transform_to_area, exclude_diagonals
 
 
 class WidgetPlots():
