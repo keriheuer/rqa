@@ -335,7 +335,7 @@ class WidgetBase():
         if self.threshold.value:
             with self.theiler_line.hold_sync():
                 y1, y2 = np.arange(len(self.distances))-self.theiler.value, np.arange(len(self.distances))+self.theiler.value
-                x_area, y_area = self.transform_to_area(np.arange(len(self.distances)), y1, y2)
+                x_area, y_area = transform_to_area(np.arange(len(self.distances)), y1, y2)
                 y_area[y_area < 0] = 0
                 y_area[y_area > len(self.distances)] = len(self.distances)
                 self.theiler_line.x = x_area
