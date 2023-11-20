@@ -78,7 +78,7 @@ class WidgetPlots():
         self.rp_matrix = HeatMap(x=self.domain, y=self.domain, color=rp._distance_matrix, scales={'color': self.cs, "x": self.x_scale, "y": self.y_scale2})
         
         # additional axis and scale for RP
-        self.cax = ColorAxis(scale=self.cs, label=r"𝜀", orientation="vertical", side="right")
+        self.cax = ColorAxis(scale=self.cs, label=r"𝜀", orientation="vertical", side="right", grid_color="black", max=np.max(self.domain))
         self.yax2 = Axis(label="Time (arb. units)",scale=self.x_scale,orientation="vertical")
 
         # create RP figure
@@ -118,7 +118,7 @@ class WidgetPlots():
         self.rp_plot.observe(self.update_rp)
         self.rp_matrix.observe(self.update_rp)
         self.threshold_by_rr35.layout.height = "40px"
-        self.threshold_by_rr35.observe(self.update_rp, type="value")
+        self.threshold_by_rr35.observe(self.update_rp, names=["value"])
     
         # render the figure alongside UI
         display(HBox([VBox([VBox([self.signal, self.ts_ui]), self.ts_plot]), VBox([self.threshold_by_rr35, self.rp_plot], layout=Layout(display="flex", flex_flow="vertical", justify_items="center", align_items="center"))]))
@@ -136,7 +136,7 @@ class WidgetPlots():
         self.y_sc = LinearScale(allow_padding=False)
 
         # create axes
-        self.c_ax = ColorAxis(scale=self.cs2, label=r"𝜀", orientation="vertical", side="right")
+        self.c_ax = ColorAxis(scale=self.cs2, label=r"𝜀", orientation="vertical", side="right", grid_color="black", max=np.max(self.domain)))
         self.x_ax = Axis(label="Time (arb. units)", scale=self.x_sc)
         self.y_ax = Axis(label="Amplitude", scale=self.y_sc,orientation="vertical")
 
