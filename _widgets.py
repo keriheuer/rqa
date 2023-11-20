@@ -38,6 +38,8 @@ import plotly.graph_objects as go, plotly.express as px
 import matplotlib as mpl, matplotlib.pyplot as pplt
 from matplotlib_inline.backend_inline import set_matplotlib_formats
 
+from ._utils import exclude_diagonals, transform_to_area
+
 def resize_colab_cell():
   display(Javascript('google.colab.output.setIframeHeight(0, true, {maxHeight: 7000})'))
 
@@ -321,7 +323,7 @@ class WidgetBase():
         self.v_mean.children[1].value = "%d" % rp.average_vertlength(v_min=v_min)
 
         # exclude diagonals
-        mask = self.exclude_diagonals(rp, self.theiler.value)
+        mask = exclude_diagonals(rp, self.theiler.value)
 
         self.det.children[1].value = "%.2f" % rp.determinism(l_min=l_min)
         self.l_max.children[1].value = "%d" % rp.max_diaglength()

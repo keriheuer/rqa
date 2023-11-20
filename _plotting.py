@@ -50,10 +50,6 @@ class WidgetPlots():
         
     def generate_rps(self):
 
-        #  initialize UI with sine wave
-        # with self.ui:
-            # display(VBox([self.frequency], layout=Layout(display="flex", overflow="visible")))
-
         # initialize time series figure with sine
         self.ts = self.white_noise(duration=self.duration.value, mean=self.mean.value, std=self.std.value)
 
@@ -205,10 +201,10 @@ class WidgetPlots():
        # self.threshold.observe(self.update_rp_colorbar, names=["value"])
       
         # horizontally display RQA UI, RP figure, and RQA stats
-        display(HBox([self.rqa_ui, VBox([self.rp2_plot, self.show_rqa_lines]), rqa_stats])) #, layout=Layout(display="flex", overflow="visible",
-            # align_items="center", flex_direction="column", justify_items="center")), rqa_stats],
-            # layout=Layout(display="flex", flex_direction="row", justify_content="space-between",
-            # align_items="center", overflow="visible")))
+        display(HBox([self.rqa_ui, VBox([self.rp2_plot, self.show_rqa_lines], layout=Layout(display="flex", overflow="visible",
+            align_items="center", flex_direction="column", justify_items="center")), rqa_stats],
+            layout=Layout(display="flex", flex_direction="row", justify_content="space-between",
+            align_items="center", overflow="visible")))
 
         # update widget instance properties
         # self.rp2_plot = fig3
@@ -311,4 +307,4 @@ class WidgetPlots():
         self.rqa_stat.observe(self.update_stat, type="change")
 
         # render Dropdown and bar plot vertically
-        display(VBox([self.rqa_stat, self.rqa_bar_plot]))
+        display(HBox([self.rqa_stat, self.rqa_bar_plot]))
