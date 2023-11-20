@@ -36,7 +36,7 @@ def transform_to_area(x, y1, y2):
 
     return np.append(x, x[::-1]), np.append(y1, y2[::-1])
 
-def exclude_diagonals(self, rp, theiler):
+def exclude_diagonals(rp, theiler):
 
   # copy recurrence matrix for plotting
   rp_matrix = rp.recurrence_matrix()
