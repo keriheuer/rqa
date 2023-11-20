@@ -257,25 +257,25 @@ class WidgetBase():
                 self.rp_matrix.color = rp.recurrence_matrix()
                 self.cs.scheme = "Greys"
                 self.rp_plot.title = "Recurrence Plot"
+                self.cax.visible = False
             else:   
                 self.rp_matrix.color = rp._distance_matrix
                 self.cs.scheme = "plasma"
                 self.rp_plot.title = "Distance Matrix"
-
+                self.cax.visible = True
             self.rp_matrix.x, self.rp_matrix.y = self.domain, self.domain
 
     def update_rp_colorbar(self, *args):
         if self.threshold_by_rr35.value == True:
-          self.rp_plot.axes.pop()
+          self.cax.visible = False
         else:
-          self.rp_plot.axes.append(self.cax)
+          self.cax.visible = True
 
     def update_rp2_colorbar(self, *args):
         if self.threshold_by_rr35.value == True:
-          self.rp2_plot.axes.pop()
+          self.c_ax.visible = False
         else:
-          self.rp2_plot.axes.append(self.cax)
-
+          self.c_ax.visible = True
       
     def update_rp2(self, *args):
         """ Updates RP from generate_rp() based on
@@ -300,6 +300,7 @@ class WidgetBase():
                 self.rp2_plot.title = "Recurrence Plot"
                 self.cs2.scheme = "Greys"
                 self.rp_matrix2.color = rp.recurrence_matrix()
+                self.cax.visible = False
 
             # plot unthresholded recurrence plot (i.e. the distance matrix)
             else:
@@ -307,6 +308,7 @@ class WidgetBase():
                 self.cs2.scheme = "plasma"
                 self.c_ax.max = np.max(rp._distance_matrix)
                 self.rp_matrix2.color = rp._distance_matrix
+                self.cax.visible = True
 
         
         # update RQA
