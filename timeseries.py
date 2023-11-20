@@ -1,3 +1,6 @@
+
+import numpy as np
+
 def sine(N, omega):
     """ Generates time series of sine wave.
 
@@ -5,15 +8,22 @@ def sine(N, omega):
     omega = frequency of sine signal
     """
 
-    t = np.arange(N)
-    sine_wave = np.sin(omega*t)
-    plt.figure(figsize=(8,2))
-    plt.plot(sine_wave)
-    plt.title('Sine Wave')
-    plt.xlabel('Time')
-    plt.ylabel('Amplitude')
-    plt.show()
-    return sine_wave
+def make_sine(freq, amp, theta=0):
+  sample_rate = 1000
+  start_time = 0
+  end_time = 0.5
+  time = np.arange(start_time, end_time, 1/sample_rate)
+  sine_wave = amp * np.sin(2 * np.pi * freq * time + theta)
+  return sine_wave
+
+def make_cosine(freq, amp, theta=0):
+  sample_rate = 1000
+  start_time = 0
+  end_time = 0.5
+  time = np.arange(start_time, end_time, 1/sample_rate)
+  cos_wave = amp * np.cos(2 * np.pi * freq * time + theta)
+  return cos_wave
+
 
 def cosine(N, omega):
     """ Generates time series of sine wave.
@@ -130,54 +140,54 @@ class Brownian():
         Init class
         """
         assert (type(x0)==float or type(x0)==int or x0 is None), "Expect a float or None for the initial value"
-        
+
         self.x0 = float(x0)
-    
+
     def gen_random_walk(self,n_step=100):
         """
         Generate motion by random walk
-        
+
         Arguments:
             n_step: Number of steps
-            
+
         Returns:
             A NumPy array with `n_steps` points
         """
         # Warning about the small number of steps
         if n_step < 30:
             print("WARNING! The number of steps is small. It may not generate a good stochastic process sequence!")
-        
+
         w = np.ones(n_step)*self.x0
-        
+
         for i in range(1,n_step):
             # Sampling from the Normal distribution with probability 1/2
             yi = np.random.choice([1,-1])
             # Weiner process
             w[i] = w[i-1]+(yi/np.sqrt(n_step))
-        
+
         return w
-    
+
     def gen_normal(self,n_step=100):
         """
         Generate motion by drawing from the Normal distribution
-        
+
         Arguments:
             n_step: Number of steps
-            
+
         Returns:
             A NumPy array with `n_steps` points
         """
         if n_step < 30:
             print("WARNING! The number of steps is small. It may not generate a good stochastic process sequence!")
-        
+
         w = np.ones(n_step)*self.x0
-        
+
         for i in range(1,n_step):
             # Sampling from the Normal distribution
             yi = np.random.normal()
             # Weiner process
             w[i] = w[i-1]+(yi/np.sqrt(n_step))
-        
+
         return w
 
 def disrupted_brownian(N, M):
@@ -334,17 +344,3 @@ def henon(length=10000, x0=None, a=1.4, b=0.3, discard=500):
         x[i] = (1 - a * x[i - 1][0] ** 2 + b * x[i - 1][1], x[i - 1][0])
 
     return x[discard:]
-
-white_noise = np.load("white_noise_ts.npy")
-sine = np.load("sine_ts.npy")
-super_sine = np.load("super_sine_ts.npy")
-logi = np.load("logistic_map_ts.npy")
-dis = np.load("brownian_ts.npy")
-
-white_noise_rp = RecurrencePlot(white_noise, metric='euclidean', silence_level=2, normalize=True, recurrence_rate=0.05, tau=2, dim=2)
-sine_rp = RecurrencePlot(sine, metric='euclidean', silence_level=2, normalize=True, recurrence_rate=0.05, tau=18, dim=6)
-super_sine_rp = RecurrencePlot(super_sine, metric='euclidean', silence_level=2, normalize=True, recurrence_rate=0.05,tau=8, dim=5)
-logi_rp = RecurrencePlot(logi, metric='euclidean', silence_level=2, normalize=True, recurrence_rate=0.05, tau=5, dim=10)
-dis_rp = RecurrencePlot(dis, metric='euclidean', silence_level=2, normalize=True, recurrence_rate=0.05, tau=2, dim=2)
-
-signals = [white_noise_rp, sine_rp, super_sine_rp, logi_rp, dis_rp]
