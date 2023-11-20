@@ -64,10 +64,12 @@ def set_css():
     .classic {
     --bq-axis-tick-text-fill: black;
     --bq-axis-border-color: black;
-    --bq-axis-tick-stroke: black;
+   # --bq-axis-tick-stroke: black;
     --bq-font: "serif";
-    --bq-axislabel-font: 14px "serif";
-    --bq-mainheading-font: 16px "serif"; }
+    --bq-axis-tick-text-font: "18px serif";
+    --bq-axislabel-font: 18px "serif";
+    --bq-mainheading-font: 18px "serif"; 
+    --bq-axis-path-stroke: black;}
 
    .bqplot .figure .jupyter-widgets .classic {
     font-family: "serif"
