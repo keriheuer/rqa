@@ -260,21 +260,29 @@ class WidgetBase():
             if self.threshold_by_rr35.value == True:
                 self.rp_matrix.color = rp.recurrence_matrix()
                 self.cs.scheme = "Greys"
-                self.rp_plot.axes.pop()
+               
                 self.rp_plot.title = "Recurrence Plot"
             else:   
                 self.rp_matrix.color = rp._distance_matrix
                 self.cs.scheme = "plasma"
-                self.rp_plot.axes.append(self.cax)
+              
                 self.rp_plot.title = "Distance Matrix"
 
             self.rp_matrix.x, self.rp_matrix.y = self.domain, self.domain
 
-    # def update_colorbar(self, *args):
-    #   if change['type'] == 'change': # and change['name'] == 'value':
-    #       x_sc.min = change['new'][0]
-    #       x_sc.max = change['new'][1]
-        
+    def update_rp_colorbar(self, *args):
+        if self.threshold_by_rr35.value == True:
+          self.rp_plot.axes.pop()
+        else:
+          self.rp_plot.axes.append(self.cax)
+
+    def update_rp2_colorbar(self, *args):
+        if self.threshold_by_rr35.value == True:
+          self.rp2_plot.axes.pop()
+        else:
+          self.rp2_plot.axes.append(self.cax)
+
+      
     def update_rp2(self, *args):
         """ Updates RP from generate_rp() based on
         current value of RQA params."""
@@ -299,7 +307,6 @@ class WidgetBase():
                 # self.distances = rp.R #recurrence_matrix()
                 self.rp2_plot.title = "Recurrence Plot"
                 self.cs2.scheme = "Greys"
-                self.rp2_plot.axes = [self.xax, self.yax2]
                 # self.rp_matrix2.x, self.rp_matrix2.y = np.arange(len(self.distances)), np.arange(len(self.distances))
                 self.rp_matrix2.color = rp.recurrence_matrix()
 
@@ -308,7 +315,6 @@ class WidgetBase():
                 # self.distances = rp._distance_matrix
                 self.rp2_plot.title = "Distance Matrix"
                 self.cs2.scheme = "plasma"
-                self.rp2_plot.axes = [self.cax, self.xax, self.yax2]
                 # self.rp_matrix2.x, self.rp_matrix2.y = np.arange(len(self.distances)), np.arange(len(self.distances))
                 self.rp_matrix2.color = rp._distance_matrix
 
