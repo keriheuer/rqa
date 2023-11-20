@@ -141,7 +141,7 @@ class WidgetPlots():
         self.y_sc = LinearScale(allow_padding=False)
 
         # create axes
-        self.c_ax = ColorAxis(scale=self.cs2, label=r"𝜀", orientation="vertical", side="right", grid_color="black", max=np.max(self.domain)))
+        self.c_ax = ColorAxis(scale=self.cs2, label=r"𝜀", orientation="vertical", side="right", grid_color="black", max=np.max(self.domain))
         self.x_ax = Axis(label="Time (arb. units)", scale=self.x_sc)
         self.y_ax = Axis(label="Amplitude", scale=self.y_sc,orientation="vertical")
 
