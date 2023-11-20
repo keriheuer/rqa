@@ -220,11 +220,11 @@ class WidgetPlots():
         """))
 
         # load in time series data
-        white_noise = np.load("rqa/data/example_timeseries/white_noise_ts.npy")
-        sine = np.load("rqa/data/example_timeseries/sine_ts.npy")
-        super_sine = np.load("rqa/data/example_timeseries/super_sine_ts.npy")
-        logi = np.load("rqa/data/example_timeseries/logistic_map_ts.npy")
-        brownian = np.load("rqa/data/example_timeseries/brownian_ts.npy")
+        white_noise = np.load(".data/example_timeseries/white_noise_ts.npy")
+        sine = np.load(".data/example_timeseries/sine_ts.npy")
+        super_sine = np.load(".data/example_timeseries/super_sine_ts.npy")
+        logi = np.load(".data/example_timeseries/logistic_map_ts.npy")
+        brownian = np.load(".data/example_timeseries/brownian_ts.npy")
 
         # create RP instances
         white_noise_rp = RecurrencePlot(white_noise, metric='euclidean', silence_level=2, normalize=True, recurrence_rate=0.05, tau=2, dim=2)
@@ -269,7 +269,7 @@ class WidgetPlots():
     def characteristic_rqa(self):
 
         # load in RQA stats
-        df = pd.read_csv('rqa/data/characteristic_systems_rqa_exclude_theiler.csv')
+        df = pd.read_csv('.data/characteristic_systems_rqa_exclude_theiler.csv')
 
         # create plotly figure widget to show bar graph of RQA
         layout = {'yaxis': {'range': [0, df['DET'].max()*1.1]}}
