@@ -270,7 +270,11 @@ class WidgetBase():
 
             self.rp_matrix.x, self.rp_matrix.y = self.domain, self.domain
 
-
+    # def update_colorbar(self, *args):
+    #   if change['type'] == 'change': # and change['name'] == 'value':
+    #       x_sc.min = change['new'][0]
+    #       x_sc.max = change['new'][1]
+        
     def update_rp2(self, *args):
         """ Updates RP from generate_rp() based on
         current value of RQA params."""
@@ -350,7 +354,7 @@ class WidgetBase():
     def update_theiler_slider(self, *args):
         if self.tau.value != 1 and self.dim.value != 1:
             self.theiler.max = (self.tau.value * self.dim.value) + 10
-
+      
     # def update_vlines(self, *args):
 
     # # distances = self.rp_matrix2.color
