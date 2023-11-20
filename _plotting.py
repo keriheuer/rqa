@@ -118,7 +118,7 @@ class WidgetPlots():
         self.rp_plot.observe(self.update_rp)
         self.rp_matrix.observe(self.update_rp)
         self.threshold_by_rr35.layout.height = "40px"
-        self.threshold_by_rr35.observe(self.update_rp, type="change")
+        self.threshold_by_rr35.observe(self.update_rp, type="value")
     
         # render the figure alongside UI
         display(HBox([VBox([VBox([self.signal, self.ts_ui]), self.ts_plot]), VBox([self.threshold_by_rr35, self.rp_plot], layout=Layout(display="flex", flex_flow="vertical", justify_items="center", align_items="center"))]))
