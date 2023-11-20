@@ -85,8 +85,8 @@ class WidgetPlots():
         self.rp_matrix = HeatMap(x=self.domain, y=self.domain, color=rp._distance_matrix, scales={'color': self.cs, "x": self.x_scale, "y": self.y_scale2})
         
         # additional axis and scale for RP
-        self.cax = ColorAxis(scale=self.cs, label=r"𝜀", orientation="vertical", side="right", grid_color="black", max=np.max(self.domain))
-        self.yax2 = Axis(label="Time (arb. units)",scale=self.x_scale,orientation="vertical")
+        self.cax = ColorAxis(scale=self.cs, label=r"𝜀", orientation="vertical", side="right", grid_color="black", max=np.max(self.distances))
+        self.yax2 = Axis(label="Time (arb. units)",scale=self.x_scale,orientation="vertical", max=np.max(self.domain))
 
         # create RP figure
         self.rp_plot = Figure(
@@ -146,12 +146,12 @@ class WidgetPlots():
         self.y_sc = LinearScale(allow_padding=False)
 
         # create axes
-        self.c_ax = ColorAxis(scale=self.cs2, label=r"𝜀", orientation="vertical", side="right", grid_color="black", max=np.max(self.domain))
-        self.x_ax = Axis(label="Time (arb. units)", scale=self.x_sc)
-        self.y_ax = Axis(label="Amplitude", scale=self.y_sc,orientation="vertical")
+        self.c_ax = ColorAxis(scale=self.cs2, label=r"𝜀", orientation="vertical", side="right", grid_color="black", max=np.max(self.distances))
+        self.x_ax = Axis(label="Time (arb. units)", scale=self.x_sc, max=np.max(self.domain))
+        self.y_ax = Axis(label="Amplitude", scale=self.y_sc,orientation="vertical", max=np.max(self.domain))
 
         # use RP from generate_rp() method
-        if validate():
+        if self.validate:
             self.line.observe(self.update_rp2, type="change")
             domain = self.domain # np.arange(len(fig2.marks[0].color))
             dist = self.distances #fig2.marks[0].color
@@ -230,11 +230,11 @@ class WidgetPlots():
         """))
 
         # load in time series data
-        white_noise = np.load(".data/example_timeseries/white_noise_ts.npy")
-        sine = np.load(".data/example_timeseries/sine_ts.npy")
-        super_sine = np.load(".data/example_timeseries/super_sine_ts.npy")
-        logi = np.load(".data/example_timeseries/logistic_map_ts.npy")
-        brownian = np.load(".data/example_timeseries/brownian_ts.npy")
+        white_noise = np.load("rqa/data/example_timeseries/white_noise_ts.npy")
+        sine = np.load("rqa/data/example_timeseries/sine_ts.npy")
+        super_sine = np.load("rqa/data/example_timeseries/super_sine_ts.npy")
+        logi = np.load("rqa/data/example_timeseries/logistic_map_ts.npy")
+        brownian = np.load("rqa/data/example_timeseries/brownian_ts.npy")
 
         # create RP instances
         white_noise_rp = RecurrencePlot(white_noise, metric='euclidean', silence_level=2, normalize=True, recurrence_rate=0.05, tau=2, dim=2)
@@ -279,7 +279,7 @@ class WidgetPlots():
     def characteristic_rqa(self):
 
         # load in RQA stats
-        df = pd.read_csv('.data/characteristic_systems_rqa_exclude_theiler.csv')
+        df = pd.read_csv('rqa/data/characteristic_systems_rqa_exclude_theiler.csv')
 
         # create plotly figure widget to show bar graph of RQA
         layout = {'yaxis': {'range': [0, df['DET'].max()*1.1]}}
@@ -294,8 +294,7 @@ class WidgetPlots():
 
         # update plot sizing
         self.rqa_bar_plot.update_layout(
-            # width=700,
-            width=1500,
+            width=1200,
             height=400,
             autosize=False,
             margin=dict(t=50, b=0, l=0, r=0),
@@ -312,69 +311,3 @@ class WidgetPlots():
 
         # render Dropdown and bar plot vertically
         display(VBox([self.rqa_stat, self.rqa_bar_plot]))
-
-    # UTILIY FUNCS
-    # def find_longest_diag(self, array2D, patternlength):
-    #     res=[]
-    #     for k in range(-array2D.shape[0]+1, array2D.shape[1]):
-    #         diag=np.diag(array2D, k=k)
-    #         if(len(diag)>=patternlength):
-    #             for i in range(len(diag)-patternlength+1):
-    #                 if(all(diag[i:i+patternlength]==1)):
-    #                     res.append((i+abs(k), i) if k<0 else (i, i+abs(k)))
-    #     return res
-
-    # def find_vmax(self, distances, i, vmax):
-    # # find start positions of all vertical lines with length = V MAXß
-    #     col = distances[i, :]
-    #     idx_pairs = np.where(np.diff(np.hstack(([False],col==1,[False]))))[0].reshape(-1,2)
-    #     lengths = np.diff(idx_pairs,axis=1) # island lengths
-    #     if vmax in lengths:
-    #         return (i, idx_pairs[np.diff(idx_pairs,axis=1).argmax(),0]) # longest island start position
-
-
-    # def find_lmax(self, array2D, lmax):
-    # # find start position of diagonal with length = L MAX
-    #     res = []
-    #     for k in range(-array2D.shape[0]+1, array2D.shape[1]):
-    #         diag = np.diag(array2D, k=k)
-    #         if(len(diag) >= lmax):
-    #             for i in range(len(diag) - lmax + 1):
-    #                 if(all(diag[i:i + lmax] == 1)):
-    #                     res.append((i + abs(k), i) if k<0 else (i, i + abs(k)))
-    #     return res
-
-    # def transform_to_area(self, x, y1, y2):
-
-    #     """ Helper function for filling between lines in bqplot figure."""
-
-    #     return np.append(x, x[::-1]), np.append(y1, y2[::-1])
-
-    # def exclude_diagonals(self, rp, theiler):
-
-    #     # copy recurrence matrix for plotting
-    #     rp_matrix = rp.recurrence_matrix()
-
-    #     # clear pyunicorn cache for RQA
-    #     rp.clear_cache(irreversible=True)
-
-    #     # set width of Theiler window (n=1 for main diagonal only)
-    #     n = theiler
-
-    #     # create mask to access corresponding entries of recurrence matrix
-    #     mask = np.zeros_like(rp.R, dtype=bool)
-
-    #     for i in range(len(rp_matrix)):
-    #         mask[i:i+n, i:i+n] = True
-
-    #     # set diagonal (and subdiagonals) of recurrence matrix to zero
-    #     # by directly accessing the recurrence matrix rp.R
-
-    #     rp.R[mask] = 0
-
-    # # check if cell generating fig2 was run, i.e. rp_plot is not empty
-    # def validate(self):
-    #     if self.rp_plot != None:
-    #         return True
-    #     else:
-    #         return False
