@@ -64,6 +64,7 @@ class WidgetPlots():
 
         # create lines mark
         self.line = Lines(x=np.arange(len(self.ts)), y=self.ts, scales={"x": self.x_scale, "y": self.y_scale}, stroke_width=1)
+        self.domain = np.arange(len(self.ts))
 
         # create time series figure
         self.ts_plot = Figure(marks=[self.line], axes=[self.xax, self.yax], title='White Noise',
@@ -79,7 +80,7 @@ class WidgetPlots():
 
         # create RP instance
         rp = RecurrencePlot(np.array(self.ts), normalize=False, metric='euclidean', recurrence_rate=0.35, silence_level=2)
-        self.domain = np.arange(len(rp._distance_matrix))
+        self.distances = np.arange(len(rp._distance_matrix))
         
         # create HeatMap mark
         self.rp_matrix = HeatMap(x=self.domain, y=self.domain, color=rp._distance_matrix, scales={'color': self.cs, "x": self.x_scale, "y": self.y_scale2})
