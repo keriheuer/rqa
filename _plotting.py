@@ -144,7 +144,7 @@ class WidgetPlots():
         self.y_ax = Axis(label="Amplitude", scale=self.y_sc,orientation="vertical")
 
         # use RP from generate_rp() method
-        if self.validate:
+        if validate():
             self.line.observe(self.update_rp2, type="change")
             domain = self.domain # np.arange(len(fig2.marks[0].color))
             dist = self.distances #fig2.marks[0].color
