@@ -257,7 +257,8 @@ class WidgetPlots():
             ax[1,i].imshow(rp.recurrence_matrix(), cmap='Greys', origin='lower', interpolation='none')
 
             # make sure subplots are square
-            ax[:,i].set_aspect('equal')
+            ax[0,i].set_aspect('equal')
+            ax[1,i].set_aspect('equal')
           
             # turn off axis ticks and set title
             ax[0,i].tick_params(which="both", axis="both", bottom=False, top=False, right=False, left=False, labelbottom=False, labelleft=False, labeltop=False)
