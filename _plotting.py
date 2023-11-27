@@ -153,8 +153,7 @@ class WidgetPlots():
             domain = self.domain # np.arange(len(fig2.marks[0].color))
             dist = self.distances #fig2.marks[0].color
         else:
-            # generate random signal based on Dropdown value
-            # pass
+            # generate random signal based on Dropdown value?
             print("ERROR: must run previous cell first")
 
         # create marks
@@ -206,13 +205,6 @@ class WidgetPlots():
             layout=Layout(display="flex", flex_direction="row", justify_content="space-between",
             align_items="center", overflow="visible")))
 
-        # update widget instance properties
-        # self.rp2_plot = fig3
-        # self.rp_matrix2 = rp_matrix2
-        # self.theiler_line = theiler_line
-        # self.vlines = vlines
-        # self.longest_diag = longest_diag
-
     def characteristic_rps(self):
 
         # make sure plots are aligned to center of output
@@ -241,7 +233,7 @@ class WidgetPlots():
         brownian_rp = RecurrencePlot(brownian, metric='euclidean', silence_level=2, normalize=True, recurrence_rate=0.05, tau=2, dim=2)
 
         # create figure and arrays to loop through
-        fig, ax = pplt.subplots(nrows=2, ncols=5, figsize=(20, 8), gridspec_kw={"height_ratios": [1,1]})
+        fig, ax = pplt.subplots(nrows=2, ncols=5, figsize=(15, 8), gridspec_kw={"height_ratios": [1,1]})
         signals = [white_noise_rp, sine_rp, super_sine_rp, logi_rp, brownian_rp]
         timeseries = [white_noise, sine, super_sine, logi, brownian]
         titles = ['White Noise', 'Sine', 'Superimposed Sine', 'Logistic Map', 'Brownian Motion']
