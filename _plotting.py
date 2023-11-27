@@ -290,7 +290,7 @@ class WidgetPlots():
         self.rqa_bar_plot.update_layout(
             width=1100,
             height=400,
-            autosize=False,
+            autosize=True,
             margin=dict(t=50, b=0, l=0, r=0),
             template="plotly_white",
             hovermode=False,
