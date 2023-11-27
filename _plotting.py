@@ -233,7 +233,7 @@ class WidgetPlots():
         brownian_rp = RecurrencePlot(brownian, metric='euclidean', silence_level=2, normalize=True, recurrence_rate=0.05, tau=2, dim=2)
 
         # create figure and arrays to loop through
-        fig, ax = pplt.subplots(nrows=2, ncols=5, figsize=(15, 8), gridspec_kw={"height_ratios": [1,1]})
+        fig, ax = pplt.subplots(nrows=2, ncols=5, figsize=(15, 8), gridspec_kw={"height_ratios": [1,1], "width_ratios": [1,1,1,1,1]})
         signals = [white_noise_rp, sine_rp, super_sine_rp, logi_rp, brownian_rp]
         timeseries = [white_noise, sine, super_sine, logi, brownian]
         titles = ['White Noise', 'Sine', 'Superimposed Sine', 'Logistic Map', 'Brownian Motion']
@@ -255,6 +255,9 @@ class WidgetPlots():
             # plot with either matshow() or imshow() with no interpolation between points
             ax[1,i].imshow(rp.recurrence_matrix(), cmap='Greys', origin='lower', interpolation='none')
 
+            # make sure subplots are square
+            ax[:,i].set_aspect('equal')
+          
             # turn off axis ticks and set title
             ax[0,i].tick_params(which="both", axis="both", bottom=False, top=False, right=False, left=False, labelbottom=False, labelleft=False, labeltop=False)
             ax[0,i].set_title(titles[i])
