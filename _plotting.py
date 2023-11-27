@@ -288,7 +288,7 @@ class WidgetPlots():
 
         # update plot sizing
         self.rqa_bar_plot.update_layout(
-            width=1200,
+            width=1100,
             height=400,
             autosize=False,
             margin=dict(t=50, b=0, l=0, r=0),
