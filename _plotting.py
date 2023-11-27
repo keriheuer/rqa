@@ -57,15 +57,16 @@ class WidgetPlots():
         self.x_scale, self.y_scale = LinearScale(), LinearScale()
         self.xax = Axis(label="Time (arb. units)",scale=self.x_scale)
         self.yax = Axis(label="Amplitude",scale=self.y_scale,orientation="vertical")
-        self.top = Axis(side="top")
-        self.right = Axis(orientation="vertical", side="right")
+       # self.top = Axis(side="top")
+       # self.right = Axis(orientation="vertical", side="right")
 
         # create lines mark
         self.line = Lines(x=np.arange(len(self.ts)), y=self.ts, scales={"x": self.x_scale, "y": self.y_scale}, stroke_width=1)
         self.domain = np.arange(len(self.ts))
 
         # create time series figure
-        self.ts_plot = Figure(marks=[self.line], axes=[self.xax, self.yax, self.top, self.right], title='White Noise',
+        self.ts_plot = Figure(marks=[self.line], axes=[self.xax, self.yax], title='White Noise',
+                                                       #self.top, self.right], title='White Noise',
         layout=Layout(height="400px", width="500px", display="flex", overflow="visible"), padding_y=0, style=self.style)
         self.ts_plot.layout.margin_right = "50px"
 
@@ -86,13 +87,13 @@ class WidgetPlots():
         # additional axis and scale for RP
         self.cax = ColorAxis(scale=self.cs, label=r"𝜀", orientation="vertical", side="right", grid_color="black", max=np.max(self.distances))
         self.yax2 = Axis(label="Time (arb. units)",scale=self.x_scale,orientation="vertical", max=np.max(self.domain))
-        self.top2 = Axis(side="top")
-        self.right2 = Axis(orientation="vertical", side="right")
+       # self.top2 = Axis(side="top")
+       # self.right2 = Axis(orientation="vertical", side="right")
 
         # create RP figure
         self.rp_plot = Figure(
             marks=[self.rp_matrix],
-            axes=[self.xax, self.yax2, self.cax, self.top2, self.right2],
+            axes=[self.xax, self.yax2, self.cax], #, self.top2, self.right2],
             title="Distance Matrix",
             layout=Layout(width="500px", height="500px", overflow="visible"),
             min_aspect_ratio=1, max_aspect_ratio=1,
@@ -149,8 +150,8 @@ class WidgetPlots():
         self.c_ax = ColorAxis(scale=self.cs2, label=r"𝜀", orientation="vertical", side="right", grid_color="black", max=np.max(self.distances))
         self.x_ax = Axis(label="Time (arb. units)", scale=self.x_sc, max=np.max(self.domain))
         self.y_ax = Axis(label="Amplitude", scale=self.y_sc,orientation="vertical", max=np.max(self.domain))
-        self.top3 = Axis(side="top")
-        self.right3 = Axis(orientation="vertical", side="right")
+       # self.top3 = Axis(side="top")
+      # self.right3 = Axis(orientation="vertical", side="right")
 
         # use RP from generate_rp() method
         if self.validate:
@@ -171,7 +172,7 @@ class WidgetPlots():
         # create Figure
         self.rp2_plot = Figure(
             marks=[self.rp_matrix2, self.theiler_line, self.vlines, self.longest_diag],
-            axes=[self.c_ax, self.x_ax, self.y_ax, self.top3, self.right3],
+            axes=[self.c_ax, self.x_ax, self.y_ax], #, self.top3, self.right3],
             title="Distance Matrix",
             layout=Layout(width="500px", height="500px", overflow="visible", margin="0px 50px"),
             min_aspect_ratio=1, max_aspect_ratio=1,
