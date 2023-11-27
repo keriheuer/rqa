@@ -77,12 +77,18 @@ def set_css():
     font-family: "serif"
     }
                
+    .display_data { 
+    min-width: 100%;
+    max-width: 1318px !important;
+    }
+    
     #output-body {
         display: flex;
         align-items: center;
         justify-content: center;
         min-width: 100%;
         max-width: 100%;
+        width: 100%;
     }
 
     .output_png {
@@ -117,12 +123,13 @@ def fix_colab_outputs():
 def setStyles():
     get_ipython().events.register('pre_run_cell', set_css)
     set_matplotlib_formats('svg')
+  
     # Colab setup ------------------
     if "google.colab" in sys.modules:
         
         get_ipython().events.register('pre_run_cell', resize_colab_cell)
         display(Javascript("google.colab.output.resizeIframeToContent()"))
-        display(Javascript('''google.colab.output.setIframeWidth(0, true, {maxWidth: 500})'''))
+        display(Javascript('''google.colab.output.setIframeWidth(0, true, {maxWidth: 1300})'''))
         fix_colab_outputs()
 
         # register custom widgets (bqplot)
@@ -190,23 +197,18 @@ class WidgetBase():
         """ Displays controls for desired time series."""
 
         if self.signal.value == 'Brownian Motion':
-            # sliders = VBox([N,M], layout=Layout(display="flex", overflow="visible"))
             self.ts_ui.children = [self.y0, self.N, self.duration_short]
 
         elif self.signal.value == 'Sine':
-            # sliders = VBox([frequency, amplitude], layout=Layout(display="flex", overflow="visible"))
             self.ts_ui.children = [self.frequency, self.amplitude, self.phi]
 
         elif self.signal.value == 'Cosine':
-            # sliders = VBox([frequency, amplitude], layout=Layout(display="flex", overflow="visible"))
             self.ts_ui.children = [self.frequency, self.amplitude, self.phi]
 
         elif self.signal.value == "Logistic Map":
-            # sliders = VBox([r,x,M], layout=Layout(display="flex", overflow="visible"))
             self.ts_ui.children = [self.r, self.x, self.duration_short, self.drift]
 
         elif self.signal.value == "Superimposed":
-            # sliders = VBox([r,x,M], layout=Layout(display="flex", overflow="visible"))
             self.ts_ui.children = [self.superimposed]
 
         elif self.signal.value == 'Rossler':
@@ -245,14 +247,6 @@ class WidgetBase():
         self.domain = np.arange(len(self.R))
 
         # update RP heatmap
-        # with self.rp_matrix.hold_sync():
-        # print(self.threshold_by_rr35.value)
-        # with self.rp_plot.hold_sync():
-            # if not brushing:
-            #     self.rp_matrix.x, self.rp_matrix.y = np.arange(len(self.distances))[start_ix:end_ix], np.arange(len(self.distances))[start_ix:end_ix]
-            #     self.rp_matrix.color = self.distances[start_ix:end_ix]
-            # else:
-
         with self.rp_plot.hold_sync():
             if self.threshold_by_rr35.value == True:
                 self.rp_matrix.color = rp.recurrence_matrix()
@@ -414,15 +408,14 @@ class WidgetBase():
 
         labels = np.array(['Determinism', 'Laminarity', 'Longest Diagonal Line Length', 'Average Diagonal Line Length', 'Longest Vertical Line Length', 'Average Vertical Line Length', 'Diagonal Line Entropy', 'Vertical Line Entropy', 'Divergence (1/L MAX)', 'Trapping Time'])
         stats = np.array(['DET', 'LAM', 'L MAX', 'L MEAN', 'V MAX', 'V MEAN', 'L ENTR', 'V ENTR', 'DIV', 'TT'])
-        # stats_formatted = np.array(['𝐷𝐸𝑇', '𝐿𝐴𝑀', '𝐿 𝑀𝐴𝑋', '𝐿 𝑀𝐸𝐴𝑁', '𝑉 𝑀𝐴𝑋', '𝑉 𝑀𝐸𝐴𝑁', '𝐿 𝐸𝑁𝑇𝑅', '𝑉 𝐸𝑁𝑇𝑅', '𝐷𝐼𝑉', '𝑇𝑇'])
-
+  
         # update bars with current stat
         i = np.where(self.rqa_stat.value == stats)[0][0]
         vals = df[stats[i]].values
         self.bar.y = vals
         self.bar.text = vals
 
-        if self.rqa_stat.value in ['L MAX', 'L MEAN', 'V MAX', 'V MEAN', 'TT']: #['𝐿 𝑀𝐴𝑋', '𝐿 𝑀𝐸𝐴𝑁', '𝑉 𝑀𝐴𝑋', '𝑉 𝑀𝐸𝐴𝑁']: 
+        if self.rqa_stat.value in ['L MAX', 'L MEAN', 'V MAX', 'V MEAN', 'TT']:  
             self.bar.texttemplate="%{y:d}" # integer
             ylabel = 'Time (arb. units)'
         elif self.rqa_stat.value == 'DIV': #'𝐷𝐼𝑉':
