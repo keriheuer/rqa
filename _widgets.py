@@ -82,11 +82,6 @@ def set_css():
    .bqplot .figure .jupyter-widgets .classic {
     font-family: "serif"
     }
-               
-    .display_data { 
-    min-width: 100%;
-    max-width: 1318px !important;
-    }
     
     #output-body {
         display: flex;
