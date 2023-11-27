@@ -67,9 +67,9 @@ def set_css():
       --bq-axis-tick-text-fill: black;
       --bq-axis-border-color: black;
       --bq-font: "serif", "sans-serif";
-      --bq-axis-tick-text-font: "18px serif";
-      --bq-axislabel-font: "18px serif";
-      --bq-mainheading-font: "18px serif"; 
+      --bq-axis-tick-text-font: "18px sans-serif";
+      --bq-axislabel-font: 18px "sans-serif";
+      --bq-mainheading-font: 18px "sans-serif"; 
       --bq-axis-path-stroke: black;
        # --bq-axis-tick-stroke: black;
      }
