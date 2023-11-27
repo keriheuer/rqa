@@ -91,7 +91,6 @@ class WidgetPlots():
             axes=[self.xax, self.yax2, self.cax],
             title="Distance Matrix",
             layout=Layout(width="500px", height="500px", overflow="visible"),
-           # fig_margin = dict(top=100, bottom=100, left=0, right=100),
             min_aspect_ratio=1, max_aspect_ratio=1,
             padding_y=0,
             style=self.style
@@ -233,8 +232,7 @@ class WidgetPlots():
         brownian_rp = RecurrencePlot(brownian, metric='euclidean', silence_level=2, normalize=True, recurrence_rate=0.05, tau=2, dim=2)
 
         # create figure and arrays to loop through
-      #figsize=(17, 6.8),
-        fig, ax = pplt.subplots(nrows=2, ncols=5, gridspec_kw={"height_ratios": [1,1], "width_ratios": [1,1,1,1,1]})
+        fig, ax = pplt.subplots(nrows=2, ncols=5, figsize=(20, 8), gridspec_kw={"height_ratios": [1,1], "width_ratios": [1,1,1,1,1]})
         signals = [white_noise_rp, sine_rp, super_sine_rp, logi_rp, brownian_rp]
         timeseries = [white_noise, sine, super_sine, logi, brownian]
         titles = ['White Noise', 'Sine', 'Superimposed Sine', 'Logistic Map', 'Brownian Motion']
