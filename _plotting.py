@@ -258,7 +258,7 @@ class WidgetPlots():
                 ax[0,i].plot(ts[:400], linewidth=1, color=c)
 
             # plot with either matshow() or imshow() with no interpolation between points
-            ax[1,i].imshow(rp.recurrence_matrix(), cmap='Greys', origin='lower', interpolation='none')
+            ax[1,i].imshow(rp, cmap='Greys', origin='lower', interpolation='none')
           
             # turn off axis ticks and set title
             ax[0,i].tick_params(which="both", axis="both", bottom=False, top=False, right=False, left=False, labelbottom=False, labelleft=False, labeltop=False)
