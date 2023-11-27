@@ -82,6 +82,11 @@ def set_css():
    .bqplot .figure .jupyter-widgets .classic {
     font-family: "serif"
     }
+
+    .plot-container .plotly .user-select-none .svg-container {
+      width: 1100px;
+      }
+    
     
     #output-body {
         display: flex;
