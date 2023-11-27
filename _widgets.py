@@ -63,15 +63,21 @@ def set_css():
       display: none !important;
     }
 
-    .classic {
-    --bq-axis-tick-text-fill: black;
-    --bq-axis-border-color: black;
-   # --bq-axis-tick-stroke: black;
-    --bq-font: "serif";
-    --bq-axis-tick-text-font: "18px serif";
-    --bq-axislabel-font: 18px "serif";
-    --bq-mainheading-font: 18px "serif"; 
-    --bq-axis-path-stroke: black;}
+    :root {
+      --bq-axis-tick-text-fill: black;
+      --bq-axis-border-color: black;
+      --bq-font: "serif", "sans-serif";
+      --bq-axis-tick-text-font: "18px serif";
+      --bq-axislabel-font: "18px serif";
+      --bq-mainheading-font: "18px serif"; 
+      --bq-axis-path-stroke: black;
+       # --bq-axis-tick-stroke: black;
+     }
+
+     .bqplot > svg .axis path {
+    stroke: var(--bq-axis-path-stroke);
+    }
+
 
    .bqplot .figure .jupyter-widgets .classic {
     font-family: "serif"
