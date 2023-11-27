@@ -130,7 +130,7 @@ def setStyles():
         
         get_ipython().events.register('pre_run_cell', resize_colab_cell)
         display(Javascript("google.colab.output.resizeIframeToContent()"))
-        display(Javascript('''google.colab.output.setIframeWidth(0, true, {maxWidth: 1300})'''))
+        display(Javascript('''google.colab.output.setIframeWidth(0, true, {maxWidth: 500})'''))
         fix_colab_outputs()
 
         # register custom widgets (bqplot)
