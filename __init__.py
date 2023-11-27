@@ -171,7 +171,7 @@ class Widget(WidgetBase, WidgetPlots, TimeSeries):
         self.superimposed = HBox(children=[self.signal1, self.signal2], layout=self.dropdown_layout)
 
         # set up widgets for RQA
-        self.rqa_stat = Dropdown(options=self.stats)
+        self.rqa_stat = Dropdown(options=self.stats, layout=self.dropdown_layout)
 
         self.tau = IntSlider(value=1,min=1,max=10,step=1,continuous_update=False, description="Time Delay (𝜏)",
             style=self.style, layout=self.slider_layout)
