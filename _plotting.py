@@ -223,13 +223,20 @@ class WidgetPlots():
         logi = np.load("rqa/data/example_timeseries/logistic_map_ts.npy")
         brownian = np.load("rqa/data/example_timeseries/brownian_ts.npy")
 
-        # create RP instances
-        white_noise_rp = RecurrencePlot(white_noise, metric='euclidean', silence_level=2, normalize=True, recurrence_rate=0.05, tau=2, dim=2)
-        sine_rp = RecurrencePlot(sine, metric='euclidean', silence_level=2, normalize=True, recurrence_rate=0.05, tau=18, dim=6)
-        super_sine_rp = RecurrencePlot(super_sine, metric='euclidean', silence_level=2, normalize=True, recurrence_rate=0.05,tau=8, dim=5)
-        logi_rp = RecurrencePlot(logi, metric='euclidean', silence_level=2, normalize=True, recurrence_rate=0.05, tau=5, dim=10)
-        brownian_rp = RecurrencePlot(brownian, metric='euclidean', silence_level=2, normalize=True, recurrence_rate=0.05, tau=2, dim=2)
-
+        # # create RP instances
+        # white_noise_rp = RecurrencePlot(white_noise, metric='euclidean', silence_level=2, normalize=True, recurrence_rate=0.05, tau=2, dim=2)
+        # sine_rp = RecurrencePlot(sine, metric='euclidean', silence_level=2, normalize=True, recurrence_rate=0.05, tau=18, dim=6)
+        # super_sine_rp = RecurrencePlot(super_sine, metric='euclidean', silence_level=2, normalize=True, recurrence_rate=0.05,tau=8, dim=5)
+        # logi_rp = RecurrencePlot(logi, metric='euclidean', silence_level=2, normalize=True, recurrence_rate=0.05, tau=5, dim=10)
+        # brownian_rp = RecurrencePlot(brownian, metric='euclidean', silence_level=2, normalize=True, recurrence_rate=0.05, tau=2, dim=2)
+        
+        # load in RPs
+        white_noise_rp = np.load("rqa/data/example_rps/white_noise_rp.npy")
+        sine_rp = np.load("rqa/data/example_rps/sine_rp.npy")
+        super_sine_rp = np.load("rqa/data/example_rps/super_sine_rp.npy")
+        logi_rp = np.load("rqa/data/example_rps/logistic_map_rp.npy")
+        brownian_rp = np.load("rqa/data/example_rps/brownian_rp.npy")
+        
         # create figure and arrays to loop through
         fig, ax = pplt.subplots(nrows=2, ncols=5, figsize=(17, 6.8), gridspec_kw={"height_ratios": [1,1], "width_ratios": [1,1,1,1,1]})
         signals = [white_noise_rp, sine_rp, super_sine_rp, logi_rp, brownian_rp]
