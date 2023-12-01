@@ -4,6 +4,7 @@ used by the RQA widget and notebook."""
 # display set up
 from IPython.display import display, Javascript, HTML, Math, Markdown
 import numpy as np
+
 # widgets
 from ipywidgets import interact, interactive, fixed, interact_manual, interactive_output, Layout, HBox, Box, VBox, Output
 from ipywidgets import IntSlider, FloatSlider, Dropdown, ToggleButton, ToggleButtons, Label
@@ -32,10 +33,10 @@ except:
 import plotly.graph_objects as go, plotly.express as px
 import matplotlib as mpl, matplotlib.pyplot as pplt
 from matplotlib_inline.backend_inline import set_matplotlib_formats
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 
-
+# utility functions
 from ._utils import find_longest_diag, find_vmax, find_lmax, transform_to_area, exclude_diagonals
-
 
 class WidgetPlots():
     def __init__(self):
@@ -312,3 +313,34 @@ class WidgetPlots():
 
         # render Dropdown and bar plot vertically
         display(HBox([self.rqa_stat, self.rqa_bar_plot]))
+
+  def rp_thresholding(self):
+    fig, ax = pplt.subplots(ncols=3, figsize=(16.4,5)) #, width_ratios=[10, 10, 1])
+  
+    ts = np.load("/content/rqa/data/example_timeseries/brownian_ts.npy")
+    thresh_rp = np.load("/content/rqa/data/example_rps/brownian_rp.npy")
+    unthresh_rp = np.load("/content/rqa/data/example_rps/brownian_dist.npy")
+  
+    ax[0].set_title('Brownian Motion', fontsize=14)
+    ax[0].set_ylabel('Amplitude', fontsize=12)
+    ax[0].set_xlabel('Time (arb. units)', fontsize=12)
+    ax[0].plot(ts, color=self.colors[-1])
+    ax[0].tick_params(which="both", axis="x", top=False, bottom=False, right=False, left=False, labelleft=False, labelbottom=False, labeltop=False, labelright=False)
+  
+    ax[1].set_title('Recurrence Plot', fontsize=14)
+    ax[1].imshow(thresh_rp, origin='lower', cmap='Greys', interpolation='none')
+    
+    ax[2].set_title('Distance Matrix', fontsize=14)
+    sc = ax[2].imshow(unthresh_rp, origin='lower', cmap='plasma', interpolation='none')
+    divider = make_axes_locatable(ax[2])
+    cax = divider.append_axes('right', size='5%', pad=0.05)
+    cb = fig.colorbar(sc, cax=cax)
+    cb.ax.set_title(r'$\epsilon$')
+    
+    for axis in (ax[1], ax[2]):
+      axis.set_xlabel('Time (arb. units)', fontsize=12)
+      axis.set_ylabel('Time (arb. units)', fontsize=12)
+      axis.tick_params(which="both", axis="both", top=False, bottom=False, right=False, left=False, labelleft=False, labelbottom=False, labeltop=False, labelright=False)
+  
+    fig.subplots_adjust(wspace=0.05)
+    fig.show()
