@@ -87,7 +87,6 @@ def set_css():
       width: 1100px;
       }
     
-    
     #output-body {
         display: flex;
         align-items: center;
@@ -101,6 +100,10 @@ def set_css():
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+
+    .markdown blockquote {
+      border-left: none !important; 
     }
 
   </style>
