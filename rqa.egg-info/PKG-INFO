@@ -1,0 +1,11 @@
+Metadata-Version: 2.1
+Name: rqa
+Version: 0.0
+Summary: RQA tutorial and analysis tools
+Home-page: https://github.com/keriheuer/rqa
+Author: Keri Heuer
+Author-email: keri.heuer@drexel.edu
+License: MIT
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE

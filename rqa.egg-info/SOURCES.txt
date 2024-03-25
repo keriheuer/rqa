@@ -1,0 +1,12 @@
+LICENSE
+README.md
+setup.py
+rqa.egg-info/PKG-INFO
+rqa.egg-info/SOURCES.txt
+rqa.egg-info/dependency_links.txt
+rqa.egg-info/requires.txt
+rqa.egg-info/top_level.txt
+timeseries/__init__.py
+timeseries/timeseries.py
+utils/__init__.py
+utils/utils.py
