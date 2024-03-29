@@ -1,10 +1,11 @@
 from matplotlib.backend_tools import Cursors
 from .config import *
-plt.ioff()
+
         
 class CharacteristicRQA:
     
     def __init__(self):
+        plt.ioff()
         
         # create characteristic RP plots
         self.zoomed = False
@@ -13,7 +14,7 @@ class CharacteristicRQA:
         rps = self.characteristic_rps()
     
         # create characteristic RQA plot
-        self.rqa_vals = pd.read_csv('rqa/data/characteristic_rqa_stats_exclude_theiler.csv', index_col=0).to_dict(orient='index')
+        self.rqa_vals = pd.read_csv(get_resource_path('data/characteristic_rqa_stats_exclude_theiler.csv'), index_col=0).to_dict(orient='index')
 
         self.stats = {'DET': 'Determinism', 'LAM': 'Laminarity', 'L MAX': 'Longest Diagonal Line Length', 
                       'V MAX': 'Longest Vertical Line Length', 'L MEAN': 'Average Diagonal Line Length', 

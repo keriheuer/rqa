@@ -12,6 +12,37 @@ from matplotlib.patches import FancyArrowPatch
 from ipywidgets import Layout, HBox, Box, VBox, IntSlider, FloatSlider, Dropdown, ToggleButton, ToggleButtons, Label, HTML
 from traitlets import dlink
 
+col = Layout(display="flex", flex_direction="column", align_items="center", width="33.33%")
+row = Layout(display="flex", flex_direction="row", width="100%", align_self="stretch", left="0", height="auto", text_align='left')
+col_align_left = Layout(display="flex", flex_direction="row", width="100%", align_self="flex-start", left="0", height="60px", text_align='center', align_items="center")
+
+widget_layout = Layout(width='100%', height='25px', margin="5px", font_family="serif")
+
+button_layout = Layout(width='auto', max_width="250px", height='25px', margin="10px", font_family="serif")
+
+ui_layout = Layout(display="flex", height="350px", flex_flow="column", overflow="visible",
+    align_items="center", justify_content="center", width="45%", font_family="CMU Serif")
+
+horizontal_layout = Layout(display="flex", flex_flow="row", height="350px", overflow= "visible",
+    align_items="center", justify_content="center", font_family="serif")
+
+vertical_layout = Layout(display="flex", flex_flow="column", height="350px", overflow= "visible",
+    align_items="center", justify_content="center", font_family="serif")
+
+label_layout = Layout(display="flex", flex_flow="row", align_items="center", justify_content="center",
+    width="100%", text_align="center", height='40px', margin="10px", font_family="serif")
+
+slider_layout = Layout(min_width="350px", font_family="serif")
+
+dropdown_layout = Layout(max_width="200px", overflow="visible")
+
+style = {'description_width': 'initial', "button_width": "auto", 'overflow':'visible',
+            'white-space': 'nowrap', 'button_color': 'lemonchiffon', 'handle_color': 'cornflowerblue',
+            'font_family': "serif"}
+
+# explicitly set width and height
+layout = Layout(width='auto', height='25px', display="flex", margin="10px", font_family="serif")
+
 # function to get the full path of files in the package
 def get_resource_path(relative_path):
     return pkg_resources.resource_filename('rqa', relative_path)

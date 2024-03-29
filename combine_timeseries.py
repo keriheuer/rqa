@@ -1,13 +1,7 @@
 from .utils import get_resource_path
 import matplotlib.pyplot as plt
-plt.style.use(get_resource_path('data/standard.mplstyle'))
-plt.ioff()
-
+# plt.style.use(get_resource_path('data/standard.mplstyle'))
 import numpy as np
-
-# %load_ext autoreload
-# %autoreload 2
-
 from traitlets import dlink
 from matplotlib.patches import Rectangle
 from .utils import *
@@ -18,10 +12,11 @@ from pyunicorn.timeseries import RecurrencePlot
 import seaborn as sns, pandas as pd
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
-
 class CombineTimeseries():
 
     def __init__(self):
+        plt.ioff()
+        
         self.cmap = sns.color_palette("hls", 8).as_hex()[::-1][:5]
         self.systems = np.array(['White Noise', 'Sine', 'Sinusoid', 'Logistic Map', 'Brownian Motion'])
         self.stats = np.array(['DET', 'LAM', 'L MAX', 'L MEAN', 'V MAX', 'V MEAN', 'L ENTR', 'V ENTR', 'DIV', 'TT'])

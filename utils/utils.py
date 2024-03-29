@@ -4,7 +4,8 @@ from pyunicorn.timeseries import RecurrencePlot
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import matplotlib.pyplot as plt, numpy as np
 import pkg_resources
-# from . import package_name  # Import the package_name from your package's __init__.py
+import subprocess
+import sys
 from matplotlib.text import Annotation
 from mpl_toolkits.mplot3d.proj3d import proj_transform
 from mpl_toolkits.mplot3d.axes3d import Axes3D
@@ -464,12 +465,11 @@ def fix_colab_outputs():
     display(HTML(output_style))
 
 def setStyles():
-    get_ipython().events.register('pre_run_cell', set_css)
     set_matplotlib_formats('svg')
   
     # Colab setup ------------------
     if "google.colab" in sys.modules:
-        
+        get_ipython().events.register('pre_run_cell', set_css)
         get_ipython().events.register('pre_run_cell', resize_colab_cell)
         display(Javascript("google.colab.output.resizeIframeToContent()"))
         display(Javascript('''google.colab.output.setIframeWidth(0, true, {maxWidth: 500})'''))
@@ -514,124 +514,138 @@ def create_row_stretch(*items):
   return HBox([*items],
                     layout=Layout(width="1300px", display="flex", flex_direction="row", justify_items="center", align_items='stretch', overflow="visible")).add_class("row-stretch")
 
+def in_notebook():
+    try:
+        from IPython import get_ipython
+        if 'IPKernelApp' not in get_ipython().config:  # pragma: no cover
+            return False
+          
+        elif get_ipython().__class__.__module__ != "google.colab._shell":
+          return False
+          
+    except ImportError:
+        return False
+    except AttributeError:
+        return False
+    return True
+  
 def setup_notebook():
-  display(HTML("""
-    <style>
-    
-    div.prompt {
-      min-width: fit-content: //80px;
-    }
-    
-    .rendered_html h1 {}
-    
-    .prompt {
-          text-align: left;
-    font-size: 12px;
-    }
-    
-    div.prompt:empty
-    
-    .text_cell_render .rendered_html > p:not(.fw) {
-      align-self: center;
-      width: 50% !important;
-      max-width: 50% !important;
-    }
-     
-     .rendered_html * + img {
-       margin-top: 0;
-     }
-     
-    .title .widget-html > .widget-html-content {
-    align-self: unset;
-    height: fit-content;
-    }
+  if in_notebook():
+    display(HTML("""
+      <style>
+      
+      div.prompt {
+        min-width: fit-content: //80px;
+      }
+      
+      .rendered_html h1 {}
+      
+      .prompt {
+            text-align: left;
+      font-size: 12px;
+      }
+      
+      div.prompt:empty
+      
+      .text_cell_render .rendered_html > p:not(.fw) {
+        align-self: center;
+        width: 50% !important;
+        max-width: 50% !important;
+      }
+      
+      .rendered_html * + img {
+        margin-top: 0;
+      }
+      
+      .title .widget-html > .widget-html-content {
+      align-self: unset;
+      height: fit-content;
+      }
 
-    .title h2 {
-        margin-top: 12px;
-        margin-bottom: 0;
-    }
+      .title h2 {
+          margin-top: 12px;
+          margin-bottom: 0;
+      }
 
-    .flush-left {
-    margin-left: 0 !important
-    }
+      .flush-left {
+      margin-left: 0 !important
+      }
 
-    .no-vert-margin {
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-    }
+      .no-vert-margin {
+      margin-top: 0 !important;
+      margin-bottom: 0 !important;
+      }
 
-    .no-margin {
-    margin: 0px !important;
-    }
+      .no-margin {
+      margin: 0px !important;
+      }
 
-    :root {
-    --jp-widgets-inline-label-width: 25px !important;
-    --jp-widgets-margin: 5px !important;
-    --jp-border-color1: black !important;
-    --jp-widgets-dropdown-arrow: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBpZD0iTGF5ZXJfMiIgZGF0YS1uYW1lPSJMYXllciAyIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOSAxMCI+CiAgPGRlZnM+CiAgICA8c3R5bGU+CiAgICAgIC5jbHMtMSB7CiAgICAgICAgc3Ryb2tlLXdpZHRoOiAwcHg7CiAgICAgIH0KICAgIDwvc3R5bGU+CiAgPC9kZWZzPgogIDxnIGlkPSJMYXllcl8xLTIiIGRhdGEtbmFtZT0iTGF5ZXIgMSI+CiAgICA8cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0xOC4xNS4xNWMuMi0uMi41MS0uMi43MSwwLC4yLjIuMi41MSwwLC43MWwtOSw5Yy0uMi4yLS41MS4yLS43MSwwTC4xNS44NUMtLjA1LjY2LS4wNS4zNC4xNS4xNS4zNC0uMDUuNjYtLjA1Ljg1LjE1bDguNjUsOC42NUwxOC4xNS4xNVoiLz4KICA8L2c+Cjwvc3ZnPg==")}
+      :root {
+      --jp-widgets-inline-label-width: 25px !important;
+      --jp-widgets-margin: 5px !important;
+      --jp-border-color1: black !important;
+      --jp-widgets-dropdown-arrow: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBpZD0iTGF5ZXJfMiIgZGF0YS1uYW1lPSJMYXllciAyIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOSAxMCI+CiAgPGRlZnM+CiAgICA8c3R5bGU+CiAgICAgIC5jbHMtMSB7CiAgICAgICAgc3Ryb2tlLXdpZHRoOiAwcHg7CiAgICAgIH0KICAgIDwvc3R5bGU+CiAgPC9kZWZzPgogIDxnIGlkPSJMYXllcl8xLTIiIGRhdGEtbmFtZT0iTGF5ZXIgMSI+CiAgICA8cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0xOC4xNS4xNWMuMi0uMi41MS0uMi43MSwwLC4yLjIuMi41MSwwLC43MWwtOSw5Yy0uMi4yLS41MS4yLS43MSwwTC4xNS44NUMtLjA1LjY2LS4wNS4zNC4xNS4xNS4zNC0uMDUuNjYtLjA1Ljg1LjE1bDguNjUsOC42NUwxOC4xNS4xNVoiLz4KICA8L2c+Cjwvc3ZnPg==")}
 
-    .toggle-button, .widget-toggle-button {
-    width: fit-content !important;
-    max-width: fit-content !important;
-    margin: 5px !important;
-    }
+      .toggle-button, .widget-toggle-button {
+      width: fit-content !important;
+      max-width: fit-content !important;
+      margin: 5px !important;
+      }
 
-    .widget-toggle-buttons {
-    height: fit-content !important;
-    margin: 0 !important;
-    }
+      .widget-toggle-buttons {
+      height: fit-content !important;
+      margin: 0 !important;
+      }
 
-    .pad-slider .slider-container {
-    margin-left: 15px !important;
-    }
+      .pad-slider .slider-container {
+      margin-left: 15px !important;
+      }
 
-    .widget-slider .noUi-handle, .jupyter-widget-slider .noUi-handle {
-    border: none;
-    top: calc((var(--jp-widgets-slider-track-thickness) - 12px) / 2);
-    width: 12px;
-    height: 12px;
-    background: #0957b5;
-    opacity: 0.95;
-    }
+      .widget-slider .noUi-handle, .jupyter-widget-slider .noUi-handle {
+      border: none;
+      top: calc((var(--jp-widgets-slider-track-thickness) - 12px) / 2);
+      width: 12px;
+      height: 12px;
+      background: #0957b5;
+      opacity: 0.95;
+      }
 
-    .widget-slider .noUi-handle:hover {
-    background-color: black;
-    border: 1px solid black;
-    opacity: 1;
-    }
-    .widget-slider .noUi-connects {
-    background: none;
-    border: 1px solid black;
-    }
+      .widget-slider .noUi-handle:hover {
+      background-color: black;
+      border: 1px solid black;
+      opacity: 1;
+      }
+      .widget-slider .noUi-connects {
+      background: none;
+      border: 1px solid black;
+      }
 
-    .jupyter-button.mod-active {
-    background-color: #0957b5;
-    color: white;
-    opacity: 0.95;
-    }
+      .jupyter-button.mod-active {
+      background-color: #0957b5;
+      color: white;
+      opacity: 0.95;
+      }
 
-    .jupyter-button {
-        border: 1px solid;
-        height: 30px;
-        background-color: white
-    }
+      .jupyter-button {
+          border: 1px solid;
+          height: 30px;
+          background-color: white
+      }
 
-    .jupyter-widgets .widget-dropdown > select {
-    border: 1px solid black;
-    background-position: right 8px center;}
+      .jupyter-widgets .widget-dropdown > select {
+      border: 1px solid black;
+      background-position: right 8px center;}
 
-    </style>"""))
+      </style>"""))
   
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from mpl_toolkits.mplot3d import Axes3D
 import ipywidgets as widgets
-from IPython.display import display
+# from IPython.display import display
 import ipyevents
-# %matplotlib widget
 from matplotlib.colors import to_rgb
-# plt.ioff()
 
 class TimeDelayAnimation:
     def __init__(self):

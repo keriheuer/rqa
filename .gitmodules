@@ -1,0 +1,3 @@
+[submodule "pyunicorn"]
+	path = pyunicorn
+	url = ../pyunicorn

@@ -27,6 +27,8 @@ import pandas as pd, sys
 from pyunicorn.timeseries import RecurrencePlot
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
+self.test = "self.test"
+test = "test"
 
 cmap = sns.color_palette("hls", 8).as_hex()[::-1][:5]
 systems = np.array(['White Noise', 'Sine', 'Sinusoid', 'Logistic Map', 'Brownian Motion'])

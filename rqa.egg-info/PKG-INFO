@@ -4,8 +4,21 @@ Version: 0.0
 Summary: RQA tutorial and analysis tools
 Home-page: https://github.com/keriheuer/rqa
 Author: Keri Heuer
-Author-email: keri.heuer@drexel.edu
-License: MIT
+Author-email: Keri Heuer <keri.heuer@drexel.edu>
+Project-URL: Homepage, https://github.com/keriheuer/rqa
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
 Requires-Python: >=3.8
 Description-Content-Type: text/markdown
 License-File: LICENSE
+Requires-Dist: numpy
+Requires-Dist: matplotlib
+Requires-Dist: scipy
+Requires-Dist: ipywidgets
+Requires-Dist: pillow
+Requires-Dist: traitlets
+Requires-Dist: seaborn
+Requires-Dist: pandas
+Requires-Dist: ipympl
+Requires-Dist: ipyevents

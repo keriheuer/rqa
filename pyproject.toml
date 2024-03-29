@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel", "Cython>=3.0.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rqa"
+version = "0.0"
+authors = [
+  { name="Keri Heuer", email="keri.heuer@drexel.edu" },
+]
+description = "RQA tutorial and analysis tools"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+license = {file = "LICENSE.md"}
+dependencies = [
+        'numpy',
+        'matplotlib',
+        'scipy',
+        #"scipy==1.11.2",
+        "ipywidgets", 
+        "pillow",  
+        "traitlets",
+        "seaborn",
+        "pandas",
+        "ipympl",
+        "ipyevents",
+        #"pyunicorn @ git+https://github.com/keriheuer/pyunicorn.git"
+    ]
+
+[project.urls]
+Homepage = "https://github.com/keriheuer/rqa"

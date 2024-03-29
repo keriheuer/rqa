@@ -1,14 +1,10 @@
 numpy
 matplotlib
-scipy==1.11.2
+scipy
 ipywidgets
 pillow
-wheel
 traitlets
-setuptools>=65
-Cython>=3.0.0
 seaborn
 pandas
 ipympl
 ipyevents
-pyunicorn@ git+https://github.com/pik-copan/pyunicorn.git#egg=pyunicorn
