@@ -3,47 +3,28 @@ from .config import *
 class CombineTimeseries():
 
     def __init__(self):
-        plt.ioff()
-        
-        self.cmap = cmap #sns.color_palette("hls", 8).as_hex()[::-1][:5]
-        self.systems = systems #np.array(['White Noise', 'Sine', 'Sinusoid', 'Logistic Map', 'Brownian Motion'])
-        self.stats = stats #np.array(['DET', 'LAM', 'L MAX', 'L MEAN', 'V MAX', 'V MEAN', 'L ENTR', 'V ENTR', 'DIV', 'TT'])
-        
-        # load pre-generated time series data
-        # self.white_noise = np.load(get_resource_path("data/example_timeseries/white_noise_ts.npy"))
-        # self.sine = np.load(get_resource_path("data/example_timeseries/sine_ts.npy"))
-        # self.super_sine = np.load(get_resource_path("data/example_timeseries/super_sine_ts.npy"))
-        # self.logi = np.load(get_resource_path("data/example_timeseries/logistic_map_ts.npy"))
-        # self.brownian = np.load(get_resource_path("data/example_timeseries/brownian_ts.npy"))
+
+        self.cmap = cmap 
+        self.systems = systems
+        self.stats = stats 
         self.signals_ts = [white_noise, sine, super_sine, logi, brownian]
-        
-        # self.colors, self.timeseries = {}, {}
-        # self.rqa_vals = {}
-        # ts_data = [self.white_noise, self.sine, self.super_sine, self.logi, self.brownian]
-        # df = pd.read_csv(get_resource_path('data/characteristic_systems_rqa_exclude_theiler.csv'))
-        # for i, s in enumerate(self.systems):
-        #     self.colors[s] = self.cmap[i]
-        #     self.timeseries[s] = ts_data[i]
-        #     self.rqa_vals[s] = {}
-        #     for stat, val in zip(df.columns, df.iloc[i].values):
-        #         self.rqa_vals[s][stat] = val
-        self.colors, self.timeseries, self.ts_data = colors, timeseries, ts_data
+        self.colors, self.timeseries = colors, ts_data
         self.rqa_vals = characteristic_rqa_stats
                 
-        self.ts1_type = Dropdown(options=self.systems, value='Brownian Motion', layout=Layout(width="200px"))
-        self.ts2_type = Dropdown(options=self.systems, value='Sine', layout=Layout(width="200px"))
-        self.ts3_type = Dropdown(options=self.systems, value='White Noise', layout=Layout(width="200px"))
+        self.ts1_type = Dropdown(options=self.systems, value='Brownian Motion', layout=Layout(width="200px", font_size="16px"))
+        self.ts2_type = Dropdown(options=self.systems, value='Sine', layout=Layout(width="200px", font_size="16px"))
+        self.ts3_type = Dropdown(options=self.systems, value='White Noise', layout=Layout(width="200px", font_size="16px"))
         
-        self.ts1_amp = HBox([FloatSlider(value=1, min=0.05, max=2, step=0.01, readout=False, continuous_update=False, description='𝐴₁', layout=Layout(width="150px", height="25px", overflow="visible")),
-                             Label("1", layout=Layout(width="fit-content"))])
-        self.ts2_amp = HBox([FloatSlider(value=1, min=0.05, max=2, step=0.01, readout=False, continuous_update=False, description='𝐴₂', layout=Layout(width="150px", height="25px", overflow="visible")),
-                             Label("1", layout=Layout(width="fit-content"))])
-        self.ts3_amp = HBox([FloatSlider(value=1, min=0.05, max=2, step=0.01, readout=False, continuous_update=False, description='𝐴\u2083', layout=Layout(width="150px", height="25px", overflow="visible")),
-                             Label("1", layout=Layout(width="fit-content"))])
+        self.ts1_amp = HBox([FloatSlider(value=1, min=0.05, max=2, step=0.01, readout=False, continuous_update=False, description='𝐴₁', layout=Layout(width="150px", height="25px", overflow="visible", font_size="16px")),
+                             Label("1", layout=Layout(width="fit-content", font_size="16px"))])
+        self.ts2_amp = HBox([FloatSlider(value=1, min=0.05, max=2, step=0.01, readout=False, continuous_update=False, description='𝐴₂', layout=Layout(width="150px", height="25px", overflow="visible", font_size="16px")),
+                             Label("1", layout=Layout(width="fit-content", font_size="16px"))])
+        self.ts3_amp = HBox([FloatSlider(value=1, min=0.05, max=2, step=0.01, readout=False, continuous_update=False, description='𝐴\u2083', layout=Layout(width="150px", height="25px", overflow="visible", font_size="16px")),
+                             Label("1", layout=Layout(width="fit-content", font_size="16px"))])
         
-        self.ts1_duration = HBox([IntSlider(value=300, min=200, max=1000, step=10, readout=False, continuous_update=False, description='𝑇₁', layout=Layout(width="150px", height="25px", overflow="visible")), Label("200", layout=Layout(width="fit-content"))])
-        self.ts2_duration = HBox([IntSlider(value=300, min=200, max=1000, step=10, readout=False, continuous_update=False, description='𝑇₂', layout=Layout(width="150px", height="25px", overflow="visible")), Label("200", layout=Layout(width="fit-content"))])
-        self.ts3_duration = HBox([IntSlider(value=300, min=200, max=1000, step=10, readout=False, continuous_update=False, description='𝑇\u2083', layout=Layout(width="150px", height="25px", overflow="visible")), Label("200", layout=Layout(width="fit-content"))])
+        self.ts1_duration = HBox([IntSlider(value=300, min=200, max=1000, step=10, readout=False, continuous_update=False, description='𝑇₁', layout=Layout(width="150px", height="25px", overflow="visible", font_size="16px")), Label("200", layout=Layout(width="fit-content", font_size="16px"))])
+        self.ts2_duration = HBox([IntSlider(value=300, min=200, max=1000, step=10, readout=False, continuous_update=False, description='𝑇₂', layout=Layout(width="150px", height="25px", overflow="visible", font_size="16px")), Label("200", layout=Layout(width="fit-content", font_size="16px"))])
+        self.ts3_duration = HBox([IntSlider(value=300, min=200, max=1000, step=10, readout=False, continuous_update=False, description='𝑇\u2083', layout=Layout(width="150px", height="25px", overflow="visible", font_size="16px")), Label("200", layout=Layout(width="fit-content", font_size="16px"))])
 
         self.ts1 = VBox([self.ts1_type, self.ts1_amp, self.ts1_duration], layout=Layout(display="flex", flex_direction="column", align_items="center", width="33.33%", justify_content="space-between"))
         self.ts2 = VBox([self.ts2_type, self.ts2_amp, self.ts2_duration], layout=Layout(display="flex", flex_direction="column", align_items="center", width="33.33%", justify_content="space-between"))
@@ -52,19 +33,18 @@ class CombineTimeseries():
         self.ts_list = HBox([self.ts1, self.ts2, self.ts3], layout=Layout(display="flex", flex_direction="row", height="110px", top="0%", align_self="flex-end", width="90%"))
         self.ts_list.layout.margin = "0 0 15px 0"
         
-        self.spliced_rr_slider = FloatSlider(min=0, max=0.25, value=0.1, step=0.01, continuous_update=False, readout=False, layout=Layout(width="150px", overflow="visible"))
+        self.spliced_rr_slider = FloatSlider(min=0, max=0.25, value=0.1, step=0.01, continuous_update=False, readout=False, layout=Layout(width="150px", overflow="visible", height="25px", ))
         self.spliced_rr_label = Label("0.10", layout=Layout(width="fit-content"))
         self.spliced_rr = HBox([Label('𝑅𝑅'), self.spliced_rr_slider, self.spliced_rr_label])
         
         self.show_splices = ToggleButton(value=False, description="Outline RP windows", layout=Layout(width="auto"))
 
-        self.spliced_tau_slider = IntSlider(min=1, max=20, value=1, step=1, continuous_update=False, description="𝜏  ", readout=False, layout=Layout(width="150px", overflow="visible"))
-        self.spliced_tau_label = Label("1", layout=Layout(width="fit-content"))
+        self.spliced_tau_slider = IntSlider(min=1, max=20, value=1, step=1, continuous_update=False, description="𝜏  ", readout=False, layout=Layout(width="150px", overflow="visible", height="25px", font_size="16px"))
+        self.spliced_tau_label = Label("1", layout=Layout(width="fit-content", font_size="16px"))
         self.spliced_tau = HBox([self.spliced_tau_slider, self.spliced_tau_label])
-        
   
-        self.spliced_dim_slider =  IntSlider(min=1, max=8, value=1, step=1, continuous_update=False, description="𝑚  ", readout=False, layout=Layout(width="150px", overflow="visible"))
-        self.spliced_dim_label = Label("1", layout=Layout(width="fit-content"))
+        self.spliced_dim_slider =  IntSlider(min=1, max=8, value=1, step=1, continuous_update=False, description="𝑚  ", readout=False, layout=Layout(width="150px", overflow="visible", height="25px", font_size="16px"))
+        self.spliced_dim_label = Label("1", layout=Layout(width="fit-content", font_size="16px"))
         self.spliced_dim = HBox([self.spliced_dim_slider, self.spliced_dim_label])
         
         self.spliced_rp_ui_left = VBox([self.spliced_rr, self.show_splices])
@@ -72,22 +52,25 @@ class CombineTimeseries():
         self.spliced_rp_ui_right = VBox([self.spliced_tau, self.spliced_dim])
         self.spliced_rp_ui_right.layout.margin = "0 10px 0 0"
         
-        self.spliced_rp_ui = HBox([self.spliced_rp_ui_left, self.spliced_rp_ui_right], layout=Layout(display="flex", flex_direction="row", justify_content="space-between", height="60px", right="0", align_self="stretch"))
+        self.spliced_rp_ui = HBox([self.spliced_rp_ui_left, self.spliced_rp_ui_right], layout=Layout(display="flex", flex_direction="row", justify_content="space-between", height="60px", right="0", align_self="stretch", overflow="visible"))
         self.spliced_rp_ui.layout.margin = "0 0 15px 0"
         
         self.spliced_rqa_stat = Dropdown(options=['DET', 'LAM', 'RR', 'L MAX', 'L MEAN', 'L ENTR', 'DIV', 'V MAX', 'TT',  'V ENTR'], value='DET',
-                                            layout=Layout(width="150px", align_self="flex-end", bottom="0"))
+                                            layout=Layout(width="150px", align_self="flex-end", bottom="0", font_size="16px"))
         
-        self.sig1 = HTML(value='<p style="font-size: 14px"><font color="%s">' % self.colors[self.ts1_type.value] + '%s' % self.ts1_type.value + '</font></p>')
-        self.sig2 = HTML(value='<p style="font-size: 14px"><font color="%s">' % self.colors[self.ts2_type.value] + '%s' % self.ts2_type.value + '</font></p>')
-        self.sig3 = HTML(value='<p style="font-size: 14px"><font color="%s">' % self.colors[self.ts3_type.value] + '%s' % self.ts3_type.value + '</font></p>')
+        self.sig1 = HTML(value='<p style="font-size: 18px"><font color="%s">' % self.colors[self.ts1_type.value] + '%s' % self.ts1_type.value + '</font></p>', layout=Layout(font_size="18px"))
+        self.sig2 = HTML(value='<p style="font-size: 18px"><font color="%s">' % self.colors[self.ts2_type.value] + '%s' % self.ts2_type.value + '</font></p>', layout=Layout(font_size="18px"))
+        self.sig3 = HTML(value='<p style="font-size: 18px"><font color="%s">' % self.colors[self.ts3_type.value] + '%s' % self.ts3_type.value + '</font></p>', layout=Layout(font_size="18px"))
         
-        self.sig1_rqa = HTML("", style=style, continuous_update=False)
-        self.sig2_rqa = HTML("", style=style, continuous_update=False)
-        self.sig3_rqa = HTML("", style=style, continuous_update=False)
+        self.sig1_rqa = HTML("", style=style, continuous_update=False, layout=Layout(font_size="18px"))
+        self.sig2_rqa = HTML("", style=style, continuous_update=False, layout=Layout(font_size="18px"))
+        self.sig3_rqa = HTML("", style=style, continuous_update=False, layout=Layout(font_size="18px"))
         
-        self.full_spliced = HTML('<p style="font-size: 14px">Combined</p>', style=style)
-        self.full_spliced_rqa = HTML("", style=style, continuous_update=False)
+        self.full_spliced = HTML('<p style="font-size: 18px">Combined</p>', style=style, layout=Layout(font_size="18px"))
+        self.full_spliced_rqa = HTML("", style=style, continuous_update=False, layout=Layout(font_size="18px"))
+        
+        for w in [self.sig1_rqa, self.sig2_rqa, self.sig3_rqa, self.full_spliced_rqa]:
+            w.layout.margin = "10px 0 0 0"
 
         self.all_rqa = HBox([self.spliced_rqa_stat,
                             VBox([self.sig1, self.sig1_rqa], layout=col),
@@ -217,7 +200,7 @@ class CombineTimeseries():
         # update RQA val
         rp_instance, rp_matrix = get_rp_matrix(new_ts, self.spliced_rr_slider.value, tau=self.spliced_tau_slider.value, dim=self.spliced_dim_slider.value)
         rqa_val = get_rqa_stat(rp_instance, self.spliced_rqa_stat.value, theiler=self.spliced_tau_slider.value*self.spliced_dim_slider.value, l_min=2, v_min=2)
-        self.sig1_rqa.value = '<p style="font-size: 14px">%s</p>' % rqa_val
+        self.sig1_rqa.value = '<p style="font-size: 18px; margin-top: 10px">%s</p>' % rqa_val
         
     def update_splice2(self, *args):
 
@@ -246,7 +229,7 @@ class CombineTimeseries():
         # update RQA val
         rp_instance, rp_matrix = get_rp_matrix(self.splice2.get_ydata(), self.spliced_rr_slider.value, tau=self.spliced_tau_slider.value, dim=self.spliced_dim_slider.value)
         rqa_val = get_rqa_stat(rp_instance, self.spliced_rqa_stat.value, theiler=self.spliced_tau_slider.value*self.spliced_dim_slider.value, l_min=2, v_min=2)
-        self.sig2_rqa.value = '<p style="font-size: 14px">%s</p>' % rqa_val
+        self.sig2_rqa.value = '<p style="font-size: 18px; margin-top: 10px">%s</p>' % rqa_val
         
 
     def update_splice3(self, *args):
@@ -277,8 +260,8 @@ class CombineTimeseries():
         # update RQA
         rp_instance, rp_matrix = get_rp_matrix(self.splice3.get_ydata(), self.spliced_rr_slider.value, tau=self.spliced_tau_slider.value, dim=self.spliced_dim_slider.value)
         rqa_val = get_rqa_stat(rp_instance, self.spliced_rqa_stat.value, theiler=self.spliced_tau_slider.value*self.spliced_dim_slider.value, l_min=2, v_min=2)
-        self.sig3_rqa.value = '<p style="font-size: 14px">%s</p>' % rqa_val
-        
+        self.sig3_rqa.value = '<p style="font-size: 18px; margin-top: 10px">%s</p>' % rqa_val
+
     def redraw_ts(self, idle=True):
                 
         self.combined_ts_ax.relim()

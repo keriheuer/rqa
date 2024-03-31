@@ -26,7 +26,7 @@ class CharacteristicRQA:
 
         # render Dropdown and bar plot vertically
         display(HBox([rps, VBox([self.rqa_stat, rqa], 
-                                       layout=Layout(display="flex", flex_direction="column", align_items="center"))]))
+                                       layout=Layout(display="flex", flex_direction="column", align_items="center", margin="12px 0 0 0"))]))
         
     def characteristic_rps(self):
          

@@ -4,32 +4,31 @@ col = Layout(display="flex", flex_direction="column", align_items="center", widt
 row = Layout(display="flex", flex_direction="row", width="100%", align_self="stretch", left="0", height="auto", text_align='left')
 col_align_left = Layout(display="flex", flex_direction="row", width="100%", align_self="flex-start", left="0", height="60px", text_align='center', align_items="center")
 
-widget_layout = Layout(width='100%', height='25px', margin="5px", font_family="serif")
+widget_layout = Layout(width='100%', height='25px', margin="5px")
 
-button_layout = Layout(width='auto', max_width="250px", height='25px', margin="10px", font_family="serif")
+button_layout = Layout(width='auto', max_width="250px", height='25px', margin="10px")
 
 ui_layout = Layout(display="flex", height="350px", flex_flow="column", overflow="visible",
-    align_items="center", justify_content="center", width="45%", font_family="CMU Serif")
+    align_items="center", justify_content="center", width="45%")
 
 horizontal_layout = Layout(display="flex", flex_flow="row", height="350px", overflow= "visible",
-    align_items="center", justify_content="center", font_family="serif")
+    align_items="center", justify_content="center")
 
 vertical_layout = Layout(display="flex", flex_flow="column", height="350px", overflow= "visible",
-    align_items="center", justify_content="center", font_family="serif")
+    align_items="center", justify_content="center")
 
-label_layout = Layout(display="flex", flex_flow="row", align_items="center", justify_content="center",
-    width="100%", text_align="center", height='40px', margin="10px", font_family="serif")
+label_layout = Layout(display="flex", flex_flow="row", align_items="center", justify_content="center", overflow="visible",
+    width="100%", text_align="center", height='40px', margin="10px")
 
-slider_layout = Layout(min_width="350px", font_family="serif")
+slider_layout = Layout(min_width="350px", overflow="visible")
 
 dropdown_layout = Layout(max_width="200px", overflow="visible")
 
 style = {'description_width': 'initial', "button_width": "auto", 'overflow':'visible',
-            'white-space': 'nowrap', 'button_color': 'lemonchiffon', 'handle_color': 'cornflowerblue',
-            'font_family': "serif"}
+            'white-space': 'nowrap', 'button_color': 'lemonchiffon', 'handle_color': 'cornflowerblue'}
 
 # explicitly set width and height
-layout = Layout(width='auto', height='25px', display="flex", margin="10px", font_family="serif")
+layout = Layout(width='auto', height='25px', display="flex", margin="10px")
 
 # function to get the full path of files in the package
 def get_resource_path(relative_path):
@@ -469,7 +468,7 @@ def create_col_center(*items):
   
 def create_row(*items):
   return HBox([*items], layout=Layout(display="flex", flex_direction="row", justify_content="space-between",
-            align_items="center", overflow="visible"))
+            align_items="center", overflow="visible", margin="12px 0 0 0"))
   
 def create_row_stretch(*items):  
   return HBox([*items],
@@ -481,7 +480,7 @@ def in_notebook():
         if 'IPKernelApp' not in get_ipython().config:  # pragma: no cover
             return False
           
-        elif get_ipython().__class__.__module__ != "google.colab._shell":
+        elif get_ipython().__class__.__module__ != "google.colab._shell":  # check if Colab notebook
           return False
           
     except ImportError:

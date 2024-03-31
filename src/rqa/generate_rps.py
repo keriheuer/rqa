@@ -28,37 +28,37 @@ class GenerateRPs:
     def create_widgets(self):
         
         # LOGISTIC MAP PARAMETERS
-        self.r = utils.create_slider(3.7, 0.5, 4, 0.01, '𝑟')
-        self.x = utils.create_slider(0.4, 0, 1, 0.1,'𝑥')
-        self.drift = utils.create_slider(0, -0.1, 0.1, 0.01, 'Drift')
+        self.r = create_slider(3.7, 0.5, 4, 0.01, '𝑟')
+        self.x = create_slider(0.4, 0, 1, 0.1,'𝑥')
+        self.drift = create_slider(0, -0.1, 0.1, 0.01, 'Drift')
 
         # PERIODIC SIGNALS
-        self.amplitude = utils.create_slider(1, 0.1, 5, 0.1,'𝐴')
-        self.frequency = utils.create_slider(2, 1, 20, 1, '𝜔')
-        self.phi = utils.create_slider(0, -3.2, 3.2, 0.2, "𝜑")
-        self.N = utils.create_slider(350, 100, 500, 10, '# Steps')
-        self.y0 = utils.create_slider(5, 1, 30, 1, '𝑦₀')
-        self.amp1 = utils.create_slider(1, 0.1, 5, 0.1, '𝐴₁')
-        self.freq1 = utils.create_slider(3, 1, 20, 1, '𝜔₁')
-        self.amp2 = utils.create_slider(1, 0.1, 5, 0.1, '𝐴₂')
-        self.freq2 = utils.create_slider(3, 1, 20, 1, '𝜔₂')
+        self.amplitude = create_slider(1, 0.1, 5, 0.1,'𝐴')
+        self.frequency = create_slider(2, 1, 20, 1, '𝜔')
+        self.phi = create_slider(0, -3.2, 3.2, 0.2, "𝜑")
+        self.N = create_slider(350, 100, 500, 10, '# Steps')
+        self.y0 = create_slider(5, 1, 30, 1, '𝑦₀')
+        self.amp1 = create_slider(1, 0.1, 5, 0.1, '𝐴₁')
+        self.freq1 = create_slider(3, 1, 20, 1, '𝜔₁')
+        self.amp2 = create_slider(1, 0.1, 5, 0.1, '𝐴₂')
+        self.freq2 = create_slider(3, 1, 20, 1, '𝜔₂')
         self.signal1_type = Dropdown(values=['Sine', 'Cosine'],options=['Sine', 'Cosine'])
         self.signal2_type = Dropdown(values=['Sine', 'Cosine'],options=['Sine', 'Cosine'])
-        self.mean = utils.create_slider(0, 0, 5, 0.1, '𝜇')
-        self.std = utils.create_slider(1, 0.1, 5, 0.1, '𝜎')
+        self.mean = create_slider(0, 0, 5, 0.1, '𝜇')
+        self.std = create_slider(1, 0.1, 5, 0.1, '𝜎')
 
         # ROSSLER ATTRACTOR -- BIFURCATION PARAMETERS
-        self.a = utils.create_slider(0.2, -0.5, 0.55, 0.01, '𝑎')
-        self.b = utils.create_slider(0.2, 0, 2, 0.01, '𝑏')
-        self.c = utils.create_slider(5.7, 0, 45, 0.01, '𝑐')
+        self.a = create_slider(0.2, -0.5, 0.55, 0.01, '𝑎')
+        self.b = create_slider(0.2, 0, 2, 0.01, '𝑏')
+        self.c = create_slider(5.7, 0, 45, 0.01, '𝑐')
 
         # GENERAL
-        self.signal1 = VBox([self.signal1_type, self.amp1, self.freq1], layout=utils.dropdown_layout)
-        self.signal2 = VBox([self.signal2_type, self.amp2, self.freq2], layout=utils.dropdown_layout)
-        self.superimposed = HBox(children=[self.signal1, self.signal2], layout=utils.dropdown_layout)
-        self.duration = utils.create_slider(500, 300, 1000, 10, '𝑇')
-        self.duration_short = utils.create_slider(150, 100, 500, 10, '𝑇')
-        self.time_step = utils.create_slider(0.01, -0.01, 0.01, 0.001, '𝑑𝑡')
+        self.signal1 = VBox([self.signal1_type, self.amp1, self.freq1], layout=dropdown_layout)
+        self.signal2 = VBox([self.signal2_type, self.amp2, self.freq2], layout=dropdown_layout)
+        self.superimposed = HBox(children=[self.signal1, self.signal2], layout=dropdown_layout)
+        self.duration = create_slider(500, 300, 1000, 10, '𝑇')
+        self.duration_short = create_slider(150, 100, 500, 10, '𝑇')
+        self.time_step = create_slider(0.01, -0.01, 0.01, 0.001, '𝑑𝑡')
 
         # UI widgets mapping
         self.ts_sliders = {
@@ -81,19 +81,19 @@ class GenerateRPs:
         }
         
         self.signal = Dropdown(options=list(self.ts_sliders.keys()), value=list(self.ts_sliders.keys())[0], description="signal").add_class('hide-label')
-        self.rqa_stat = Dropdown(options=list(self.stats.keys()), layout=utils.dropdown_layout, description="rqa metric").add_class('hide-label')
-        self.tau = utils.create_slider(1, 1, 10, 1,"Time Delay (𝜏)").add_class("pad-slider")
-        self.dim = utils.create_slider(1, 1, 10, 1, 'Embedding Dimension (𝑚)').add_class("pad-slider")
-        self.normalize = ToggleButton(description="Normalize time series", value=True, layout=utils.button_layout).add_class('flush-left')
-        self.metric = ToggleButtons(options=['Euclidean', 'Manhattan', 'Supremum'], style=utils.style, layout=utils.button_layout).add_class('no-margins')
-        self.metric_label = Label('Distance Metric', layout=utils.layout).add_class("flush-left shrink-vertical-margin")
-        self.RR = utils.create_slider(0.15, 0.01, 0.99, 0.01, "Recurrence Rate (𝑅𝑅)")
-        self.which_RR = ToggleButtons(options=['Global 𝑅𝑅', 'Local 𝑅𝑅'], style=utils.style, layout=utils.button_layout).add_class('no-margins')
-        self.threshold = ToggleButton(description='Threshold 𝑅𝑃', value=False, layout=utils.button_layout) #.add_class('flush-left')
-        self.lmin = utils.create_slider(2, 2, 10, 1, '𝐿 𝑀𝐼𝑁')
-        self.vmin = utils.create_slider(2, 2, 10, 1, '𝑉 𝑀𝐼𝑁')
-        self.theiler = utils.create_slider(1, 1, 20, 1, "Theiler Window")
-        self.threshold_by_rr35 = ToggleButton(description='Threshold by 𝑅𝑅 = 15%', value=False, style=utils.style, layout=utils.button_layout)
+        self.rqa_stat = Dropdown(options=list(self.stats.keys()), layout=dropdown_layout, description="rqa metric").add_class('hide-label')
+        self.tau = create_slider(1, 1, 10, 1, "Time Delay (𝜏)").add_class("pad-slider")
+        self.dim = create_slider(1, 1, 10, 1, 'Embedding Dimension (𝑚)').add_class("pad-slider")
+        self.normalize = ToggleButton(description="Normalize time series", value=True, layout=button_layout, style=style).add_class('flush-left')
+        self.metric = ToggleButtons(options=['Euclidean', 'Manhattan', 'Supremum'], style=style, layout=button_layout).add_class('no-margins')
+        self.metric_label = Label('Distance Metric', layout=layout, style=style).add_class("flush-left shrink-vertical-margin")
+        self.RR = create_slider(0.15, 0.01, 0.99, 0.01, "Recurrence Rate (𝑅𝑅)")
+        self.which_RR = ToggleButtons(options=['Global 𝑅𝑅', 'Local 𝑅𝑅'], style=style, layout=button_layout).add_class('no-margins')
+        self.threshold = ToggleButton(description='Threshold 𝑅𝑃', value=False, layout=button_layout, style=style)
+        self.lmin = create_slider(2, 2, 10, 1, '𝐿 𝑀𝐼𝑁')
+        self.vmin = create_slider(2, 2, 10, 1, '𝑉 𝑀𝐼𝑁')
+        self.theiler = create_slider(1, 1, 20, 1, "Theiler Window")
+        self.threshold_by_rr35 = ToggleButton(description='Threshold by 𝑅𝑅 = 15%', value=False, style=style, layout=button_layout)
         
         # initialize time series user interface with white noise sliders
         self.ts_ui = VBox([self.duration, self.mean, self.std], layout=Layout(display="flex", overflow="visible"))
@@ -112,25 +112,25 @@ class GenerateRPs:
         
         # RQA inputs and output
         self.rqa_ui = VBox([self.label1, self.tau, self.dim, self.normalize,  
-            self.label2, HBox([self.metric_label, self.metric], style=utils.style), self.RR, 
-            HBox([Label("For 𝑅𝑄𝐴, threshold by", layout=utils.layout).add_class("flush-left shrink-vertical-margin"), self.which_RR], style=utils.style),
+            self.label2, HBox([self.metric_label, self.metric], style=style), self.RR, 
+            HBox([Label("For 𝑅𝑄𝐴, threshold by", layout=layout, style=style).add_class("flush-left shrink-vertical-margin"), self.which_RR], style=style),
             self.threshold, self.label3, self.theiler, self.lmin, self.vmin],
             layout=Layout(width="400px", overflow="visible", margin_right="50px"))
         
         # widgets to display RQA stats
-        self.det = utils.create_text("Determinism:")
-        self.lam = utils.create_text("Laminarity:")
-        self.rr = utils.create_text("Recurrence Rate:")
-        self.tt = utils.create_text("Trapping Time:")
-        self.l_entr = utils.create_text("Diagonal Entropy:")
-        self.l_max = utils.create_text("𝐿 𝑀𝐴𝑋:")
-        self.l_mean = utils.create_text("𝐿 𝑀𝐸𝐴𝑁:")
-        self.div = utils.create_text("Divergence (1 / 𝐿 𝑀𝐴𝑋):")
-        self.v_entr = utils.create_text("Vertical Entropy:") 
-        self.v_max = utils.create_text("𝑉 𝑀𝐴𝑋:")
-        self.v_mean = utils.create_text("𝑉 𝑀𝐸𝐴𝑁:")
+        self.det = create_text("Determinism:")
+        self.lam = create_text("Laminarity:")
+        self.rr = create_text("Recurrence Rate:")
+        self.tt = create_text("Trapping Time:")
+        self.l_entr = create_text("Diagonal Entropy:")
+        self.l_max = create_text("𝐿 𝑀𝐴𝑋:")
+        self.l_mean = create_text("𝐿 𝑀𝐸𝐴𝑁:")
+        self.div = create_text("Divergence (1 / 𝐿 𝑀𝐴𝑋):")
+        self.v_entr = create_text("Vertical Entropy:") 
+        self.v_max = create_text("𝑉 𝑀𝐴𝑋:")
+        self.v_mean = create_text("𝑉 𝑀𝐸𝐴𝑁:")
 
-        self.statistics = utils.create_col_center(self.det, self.lam, self.rr, self.tt, self.v_entr, 
+        self.statistics = create_col_center(self.det, self.lam, self.rr, self.tt, self.v_entr, 
                             self.l_max, self.l_mean, self.div, self.v_entr, self.v_max, self.v_mean)
         self.statistics.layout.width = "200px"
         self.statistics.layout.padding = "initial initial initial 15px"
@@ -142,20 +142,20 @@ class GenerateRPs:
         for widget in [self.frequency, self.N, self.r, self.x, self.duration, self.duration_short, self.time_step, self.amplitude,
                 self.y0, self.drift, self.phi, self.amp1, self.freq1, self.amp2, self.freq2, self.signal, self.signal1_type, self.signal2_type,
                 self.mean, self.std, self.a, self.b, self.c]:
-                if isinstance(widget, HBox): # a slider
-                    widget.children[0].observe(self.update_lightcurve) #,names='value') #, names=['value'])
+                if isinstance(widget, HBox):
+                    widget.children[0].observe(self.update_lightcurve)
                    
                 else:
-                    widget.observe(self.update_lightcurve) #, names='value') #, names=['value'])
+                    widget.observe(self.update_lightcurve)
         
-        self.threshold_by_rr35.observe(self.update_rp) #, names=["value"])
+        self.threshold_by_rr35.observe(self.update_rp)
         
         for w in [self.tau, self.dim, self.normalize, self.metric, self.threshold, self.RR,
             self.which_RR, self.lmin, self.vmin, self.theiler, self.l_max, self.v_max]:
-            if isinstance(w, HBox): #slider
+            if isinstance(w, HBox):
                 w.children[0].observe(self.update_rp2)
             else:
-                w.observe(self.update_rp2) #, type="change")
+                w.observe(self.update_rp2)
                 
         for w in [self.tau, self.dim, self.theiler]:
             w.children[0].observe(self.update_theiler_slider, type="change")
@@ -184,8 +184,8 @@ class GenerateRPs:
         
          # create figures
         ylabel, xlabel, title, margins = "Amplitude", "Time (arb. units)", "Brownian Motion", {'x':0.02, 'y':0.02}
-        self.ts_plot, self.ts_ax = utils.create_fig(6,4, xlabel=xlabel, ylabel=ylabel, title=title, position=None, margins=margins, ticks=True, layout="compressed") 
-        self.rp_plot, self.rp_ax = utils.create_fig(6.5,5.5, xlabel=xlabel, ylabel=xlabel, title='Distance Matrix', margins=margins, ticks=False, layout="compressed", aspect='equal') 
+        self.ts_plot, self.ts_ax = create_fig(6,4, xlabel=xlabel, ylabel=ylabel, title=title, position=None, margins=margins, ticks=True, layout="compressed") 
+        self.rp_plot, self.rp_ax = create_fig(6.5,5.5, xlabel=xlabel, ylabel=xlabel, title='Distance Matrix', margins=margins, ticks=False, layout="compressed", aspect='equal') 
         
         # initial plot
         self.ts = self.ts_functions[self.signal.value]
@@ -203,7 +203,7 @@ class GenerateRPs:
         right = VBox([self.threshold_by_rr35, self.rp_plot.canvas],
                         layout=Layout(display="flex", flex_direction="column", justify_items="center", align_items="center", right="0")).add_class("right")
         row = HBox([left, right],
-                    layout=Layout(width="1300px", display="flex", flex_direction="row", justify_items="center", align_items='stretch')).add_class("row")
+                    layout=Layout(width="1300px", display="flex", flex_direction="row", justify_items="center", align_items='stretch', margin="12px 0 0 0")).add_class("row")
         display(row)
         
         display(HTML(""" <style> 
@@ -283,7 +283,7 @@ class GenerateRPs:
     def refresh_rp(self, fig, ax, rp_matrix, cb, data):
         
         # update extent and tick_params
-        utils.update_extent(rp_matrix, data)
+        update_extent(rp_matrix, data)
         ax.tick_params(which="both", axis="both", right=False, bottom=False, top=False, left=False, labeltop=False, labelbottom=True, labelleft=True, labelright=False)
         cb.ax.tick_params(which="both", axis="both", right=True, bottom=False, top=False, left=False, labelright=True, direction='out')
         cb.ax.tick_params(which="minor", direction='out', length=3)
@@ -296,11 +296,11 @@ class GenerateRPs:
     def varyParams(self):
         
         ylabel, xlabel, title, margins = "Amplitude", "Time (arb. units)", self.signal.value, {'x':0.02, 'y':0.02}
-        self.rp_plot2, self.rp_ax2 = utils.create_fig(6.5,5.5, xlabel=xlabel, ylabel=xlabel, title='Distance Matrix', margins=margins, ticks=False, layout="compressed", aspect='equal') 
+        self.rp_plot2, self.rp_ax2 = create_fig(6.5,5.5, xlabel=xlabel, ylabel=xlabel, title='Distance Matrix', margins=margins, ticks=False, layout="compressed", aspect='equal') 
         self.rp_matrix2 = self.rp_ax2.matshow(self.rp._distance_matrix, origin='lower', cmap='plasma', interpolation='none')
         self.rp_cb2 = self.add_colorbar(self.rp_plot2, self.rp_ax2, self.rp_matrix2, cbar_title=r'$\epsilon$')
         self.rp_ax2.tick_params(which="both", axis="both", right=False, bottom=False, top=False, left=False, labeltop=False, labelbottom=True, labelleft=True, labelright=False)
-        utils.update_extent(self.rp_matrix2, self.rp._distance_matrix)
+        update_extent(self.rp_matrix2, self.rp._distance_matrix)
         
         # retrieve current light curve
         ts = self.ts_ax.lines[0].get_ydata()
@@ -314,7 +314,7 @@ class GenerateRPs:
         self.update_rqa_vals(self.rp, self.lmin.children[0].value, self.vmin.children[0].value)
         
         # horizontally display RQA UI, RP figure, and RQA stats
-        display(utils.create_row(self.rqa_ui, self.rp_plot2.canvas, self.statistics))
+        display(create_row(self.rqa_ui, self.rp_plot2.canvas, self.statistics))
        
         self.ts_plot.canvas.observe(self.update_rp2, type="change")
                 

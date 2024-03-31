@@ -59,12 +59,11 @@ logi_rp = np.load(get_resource_path("data/example_rps/logistic_map_rp.npy"))
 brownian_rp = np.load(get_resource_path("data/example_rps/brownian_rp.npy"))
 signals_rp = [white_noise_rp, sine_rp, super_sine_rp, logi_rp, brownian_rp]
 
-colors, timeseries = {}, {}
+colors, ts_data = {}, {}
 characteristic_rqa_stats = {}
-ts_data = [white_noise, sine, super_sine, logi, brownian]
 for i, s in enumerate(systems):
     colors[s] = cmap[i]
-    timeseries[s] = ts_data[i]
+    ts_data[s] = signals_ts[i]
     characteristic_rqa_stats[s] = {}
 
 df = pd.read_csv(get_resource_path('data/characteristic_systems_rqa_exclude_theiler.csv'))
