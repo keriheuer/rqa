@@ -1,3 +1,5 @@
+from config import *
+
 col = Layout(display="flex", flex_direction="column", align_items="center", width="33.33%")
 row = Layout(display="flex", flex_direction="row", width="100%", align_self="stretch", left="0", height="auto", text_align='left')
 col_align_left = Layout(display="flex", flex_direction="row", width="100%", align_self="flex-start", left="0", height="60px", text_align='center', align_items="center")

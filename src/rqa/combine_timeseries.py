@@ -1,3 +1,5 @@
+from config import *
+
 class CombineTimeseries():
 
     def __init__(self):
