@@ -1,6 +1,4 @@
-from matplotlib.backend_tools import Cursors
 from .config import *
-
         
 class CharacteristicRQA:
     
@@ -28,27 +26,32 @@ class CharacteristicRQA:
 
         # render Dropdown and bar plot vertically
         display(HBox([rps, VBox([self.rqa_stat, rqa], 
-                                       layout=Layout(display="flex", flex_direction="column", align_items="center"))]))
+                                       layout=Layout(display="flex", flex_direction="column", align_items="center", margin="12px 0 0 0"))]))
         
     def characteristic_rps(self):
          
         # load in pre-generated time series data
-        self.white_noise = np.load(get_resource_path("data/example_timeseries/white_noise_ts.npy"))
-        self.sine = np.load(get_resource_path("data/example_timeseries/sine_ts.npy"))
-        self.super_sine = np.load(get_resource_path("data/example_timeseries/super_sine_ts.npy"))
-        self.logi = np.load(get_resource_path("data/example_timeseries/logistic_map_ts.npy"))
-        self.brownian = np.load(get_resource_path("data/example_timeseries/brownian_ts.npy"))
+        # self.white_noise = np.load("rqa/data/example_timeseries/white_noise_ts.npy")
+        # self.sine = np.load("rqa/data/example_timeseries/sine_ts.npy")
+        # self.super_sine = np.load("rqa/data/example_timeseries/super_sine_ts.npy")
+        # self.logi = np.load("rqa/data/example_timeseries/logistic_map_ts.npy")
+        # self.brownian = np.load("rqa/data/example_timeseries/brownian_ts.npy")
         
-        # load in corresponding RPs
-        self.white_noise_rp = np.load(get_resource_path("data/example_rps/white_noise_rp.npy"))
-        self.sine_rp = np.load(get_resource_path("data/example_rps/sine_rp.npy"))
-        self.super_sine_rp = np.load(get_resource_path("data/example_rps/super_sine_rp.npy"))
-        self.logi_rp = np.load(get_resource_path("data/example_rps/logistic_map_rp.npy"))
-        self.brownian_rp = np.load(get_resource_path("data/example_rps/brownian_rp.npy"))
-      
-        self.signals_ts = [self.white_noise, self.sine, self.super_sine, self.logi, self.brownian]
-        self.signals_rp = [self.white_noise_rp, self.sine_rp, self.super_sine_rp, self.logi_rp, self.brownian_rp]
+        # # load in corresponding RPs
+        # self.white_noise_rp = np.load("rqa/data/example_rps/white_noise_rp.npy")
+        # self.sine_rp = np.load("rqa/data/example_rps/sine_rp.npy")
+        # self.super_sine_rp = np.load("rqa/data/example_rps/super_sine_rp.npy")
+        # self.logi_rp = np.load("rqa/data/example_rps/logistic_map_rp.npy")
+        # self.brownian_rp = np.load("rqa/data/example_rps/brownian_rp.npy")
 
+        # self.signals_ts = [self.white_noise, self.sine, self.super_sine, self.logi, self.brownian]
+        # self.signals_rp = [self.white_noise_rp, self.sine_rp, self.super_sine_rp, self.logi_rp, self.brownian_rp]
+
+        self.white_noise, self.sine, self.super_sine, self.logi, self.brownian = white_noise, sine, super_sine, logi, brownian
+        self.white_noise_rp, self.sine_rp, self.super_sine_rp, self.logi_rp, self.brownian_rp = white_noise_rp, sine_rp, super_sine_rp, logi_rp, brownian_rp
+        self.signals_ts = signals_ts
+        self.signals_rp = signals_rp
+      
         # create figure
         self.fig, self.axs = plt.subplots(nrows=2, ncols=5, figsize=(8.5, 4), layout='compressed')
         self.fig.canvas.toolbar_visible = False

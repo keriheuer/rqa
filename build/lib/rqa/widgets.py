@@ -363,27 +363,6 @@ class GenerateRPs:
         cb = fig.colorbar(sc, cax=cax, label=cbar_title)
         return cb
 
-
-
-import matplotlib.pyplot as plt
-plt.style.use('rqa_tutorial/data/standard.mplstyle') # need to use absolute path
-plt.ioff()
-
-import numpy as np
-
-# %load_ext autoreload
-# %autoreload 2
-
-from traitlets import dlink
-from matplotlib.patches import Rectangle
-from rqa._utils import normalize, connect_splices, plot_rp_matrix, get_rp_matrix, update_extent, get_rqa_stat, validate_rqa #create_default_fig, format_slider_label
-from ipywidgets import Layout, HBox, Box, VBox, IntSlider, FloatSlider, Dropdown, ToggleButton, ToggleButtons, Label, HTML
-from rqa._styles import row, col, style
-from pyunicorn.timeseries import RecurrencePlot
-import seaborn as sns, pandas as pd
-from mpl_toolkits.axes_grid1 import make_axes_locatable
-
-
 class CombineTimeseries():
 
     def __init__(self):
@@ -1323,3 +1302,21 @@ class GenerateRPs:
         cb.outline.set_linewidth(1.25)
         return cb
     
+
+import matplotlib.pyplot as plt
+plt.style.use('rqa_tutorial/data/standard.mplstyle') # need to use absolute path
+plt.ioff()
+
+import numpy as np
+
+# %load_ext autoreload
+# %autoreload 2
+
+from traitlets import dlink
+from matplotlib.patches import Rectangle
+from rqa._utils import normalize, connect_splices, plot_rp_matrix, get_rp_matrix, update_extent, get_rqa_stat, validate_rqa #create_default_fig, format_slider_label
+from ipywidgets import Layout, HBox, Box, VBox, IntSlider, FloatSlider, Dropdown, ToggleButton, ToggleButtons, Label, HTML
+from rqa._styles import row, col, style
+from pyunicorn.timeseries import RecurrencePlot
+import seaborn as sns, pandas as pd
+from mpl_toolkits.axes_grid1 import make_axes_locatable
