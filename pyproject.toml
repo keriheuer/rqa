@@ -1,16 +1,19 @@
 [build-system]
-requires = ["setuptools>=61.0", "wheel", "Cython>=3.0.0"]
+requires = ["setuptools>=61.0"]
+#, "wheel", "Cython>=3.0.0"
 build-backend = "setuptools.build_meta"
+#requires = ["poetry-core>=1.0.0"]
+#build-backend = "poetry.core.masonry.api"
 
 [project]
 name = "rqa"
-version = "0.0"
+version = "0.0.0"
 authors = [
   { name="Keri Heuer", email="keri.heuer@drexel.edu" },
 ]
 description = "RQA tutorial and analysis tools"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
@@ -34,3 +37,14 @@ dependencies = [
 
 [project.urls]
 Homepage = "https://github.com/keriheuer/rqa"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+namespaces = true
+where = ["src"]
+
+[tool.setuptools.package-data]
+rqa = ["*"]
+"rqa.data" = ["*"]

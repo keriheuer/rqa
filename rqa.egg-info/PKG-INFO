@@ -1,9 +1,7 @@
 Metadata-Version: 2.1
 Name: rqa
-Version: 0.0
+Version: 0.0.0
 Summary: RQA tutorial and analysis tools
-Home-page: https://github.com/keriheuer/rqa
-Author: Keri Heuer
 Author-email: Keri Heuer <keri.heuer@drexel.edu>
 Project-URL: Homepage, https://github.com/keriheuer/rqa
 Classifier: Programming Language :: Python :: 3
@@ -12,6 +10,7 @@ Classifier: Operating System :: OS Independent
 Requires-Python: >=3.8
 Description-Content-Type: text/markdown
 License-File: LICENSE
+License-File: LICENSE.md
 Requires-Dist: numpy
 Requires-Dist: matplotlib
 Requires-Dist: scipy

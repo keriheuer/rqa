@@ -1,0 +1,7 @@
+include src/rqa/data/*.csv
+include src/rqa/data/*.ttf
+include src/rqa/data/*.svg
+include src/rqa/data/*.png
+include src/rqa/data/*.mplstyle
+include src/rqa/data/example_rps/*.npy
+include src/rqa/data/example_timeseries/*.npy
