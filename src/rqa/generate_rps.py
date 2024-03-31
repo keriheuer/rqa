@@ -1,6 +1,5 @@
 from . import timeseries
 from .utils import *
-from .config import *
 
 class GenerateRPs:
     

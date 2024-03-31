@@ -1,5 +1,3 @@
-from .config import *
-        
 class CharacteristicRQA:
     
     def __init__(self):
