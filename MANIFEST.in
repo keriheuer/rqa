@@ -5,3 +5,4 @@ include src/rqa/data/*.png
 include src/rqa/data/*.mplstyle
 include src/rqa/data/example_rps/*.npy
 include src/rqa/data/example_timeseries/*.npy
+inclue src/pyunicorn/*
