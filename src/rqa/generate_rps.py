@@ -4,7 +4,7 @@ from ipywidgets import Layout, HBox, Box, VBox, IntSlider, FloatSlider, Dropdown
 import pandas as pd, sys
 from . import utils, timeseries
 from .utils import get_resource_path
-from pyunicorn.timeseries import RecurrencePlot
+from .pyunicorn.timeseries import RecurrencePlot
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 class GenerateRPs:

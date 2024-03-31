@@ -1,6 +1,6 @@
 from ipywidgets import Layout, HTML
 from IPython.display import display, Javascript
-from pyunicorn.timeseries import RecurrencePlot
+from .pyunicorn.timeseries import RecurrencePlot
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import matplotlib.pyplot as plt, numpy as np
 import pkg_resources

@@ -1,6 +1,4 @@
-from .utils import get_resource_path
 import matplotlib.pyplot as plt
-# plt.style.use(get_resource_path('data/standard.mplstyle'))
 import numpy as np
 from traitlets import dlink
 from matplotlib.patches import Rectangle
@@ -8,7 +6,7 @@ from .utils import *
 # normalize, connect_splices, plot_rp_matrix, get_rp_matrix, update_extent, get_rqa_stat, validate_rqa #create_default_fig, format_slider_label
 from ipywidgets import Layout, HBox, Box, VBox, IntSlider, FloatSlider, Dropdown, ToggleButton, ToggleButtons, Label, HTML
 # from rqa._styles import row, col, style
-from pyunicorn.timeseries import RecurrencePlot
+from .pyunicorn.timeseries import RecurrencePlot
 import seaborn as sns, pandas as pd
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
