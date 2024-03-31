@@ -1,18 +1,4 @@
-from ipywidgets import Layout, HTML
-from IPython.display import display, Javascript
-from .pyunicorn.timeseries import RecurrencePlot
-from mpl_toolkits.axes_grid1 import make_axes_locatable
-import matplotlib.pyplot as plt, numpy as np
-import pkg_resources
-# import importlib
-import subprocess
-import sys
-from matplotlib.text import Annotation
-from mpl_toolkits.mplot3d.proj3d import proj_transform
-from mpl_toolkits.mplot3d.axes3d import Axes3D
-from matplotlib.patches import FancyArrowPatch
-from ipywidgets import Layout, HBox, Box, VBox, IntSlider, FloatSlider, Dropdown, ToggleButton, ToggleButtons, Label, HTML
-from traitlets import dlink
+from .config import *
 
 col = Layout(display="flex", flex_direction="column", align_items="center", width="33.33%")
 row = Layout(display="flex", flex_direction="row", width="100%", align_self="stretch", left="0", height="auto", text_align='left')
@@ -327,33 +313,6 @@ def update_extent(im, data):
     im.axes.autoscale_view()
     im.axes.margins(x=0, y=0)
     im.set_extent([0, len(data), 0, len(data)])
-
-col = Layout(display="flex", flex_direction="column", align_items="center", width="33.33%")
-row = Layout(display="flex", flex_direction="row", width="100%", align_self="stretch", left="0", height="auto", text_align='left')
-col_align_left = Layout(display="flex", flex_direction="row", width="100%", align_self="flex-start", left="0", height="60px", text_align='center', align_items="center")
-
-widget_layout = Layout(width='100%', height='25px', margin="5px")
-
-button_layout = Layout(width='auto', max_width="fit-content", height='30px', margin="5px")
-
-ui_layout = Layout(display="flex", height="350px", flex_direction="column", overflow="visible",
-    align_items="center", justify_content="center", width="45%")
-
-horizontal_layout = Layout(display="flex", flex_direction="row", height="350px", overflow= "visible",
-    align_items="center", justify_content="center")
-
-vertical_layout = Layout(display="flex", flex_direction="column", height="350px", overflow= "visible",
-    align_items="center", justify_content="center")
-
-label_layout = Layout(display="flex", flex_flow="row", align_items="center", justify_content="center",
-    width="100%", text_align="center", height='40px', margin="0")
-
-slider_layout = Layout(min_width="150px")
-
-dropdown_layout = Layout(max_width="200px", overflow="visible")
-
-style = {'description_width': 'initial', "button_width": "auto", 'overflow':'visible',
-            'white-space': 'nowrap', 'button_color': 'lemonchiffon', 'handle_color': 'cornflowerblue'}
 
 # explicitly set width and height
 layout = Layout(width='auto', height='25px', display="flex", margin="0px")

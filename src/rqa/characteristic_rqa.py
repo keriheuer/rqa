@@ -1,4 +1,3 @@
-from matplotlib.backend_tools import Cursors
 from .config import *
         
 class CharacteristicRQA:

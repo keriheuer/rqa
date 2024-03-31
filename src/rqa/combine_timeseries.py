@@ -1,42 +1,34 @@
-import matplotlib.pyplot as plt
-import numpy as np
-from traitlets import dlink
-from matplotlib.patches import Rectangle
-from .utils import *
-# normalize, connect_splices, plot_rp_matrix, get_rp_matrix, update_extent, get_rqa_stat, validate_rqa #create_default_fig, format_slider_label
-from ipywidgets import Layout, HBox, Box, VBox, IntSlider, FloatSlider, Dropdown, ToggleButton, ToggleButtons, Label, HTML
-# from rqa._styles import row, col, style
-from .pyunicorn.timeseries import RecurrencePlot
-import seaborn as sns, pandas as pd
-from mpl_toolkits.axes_grid1 import make_axes_locatable
+from .config import *
 
 class CombineTimeseries():
 
     def __init__(self):
         plt.ioff()
         
-        self.cmap = sns.color_palette("hls", 8).as_hex()[::-1][:5]
-        self.systems = np.array(['White Noise', 'Sine', 'Sinusoid', 'Logistic Map', 'Brownian Motion'])
-        self.stats = np.array(['DET', 'LAM', 'L MAX', 'L MEAN', 'V MAX', 'V MEAN', 'L ENTR', 'V ENTR', 'DIV', 'TT'])
+        self.cmap = cmap #sns.color_palette("hls", 8).as_hex()[::-1][:5]
+        self.systems = systems #np.array(['White Noise', 'Sine', 'Sinusoid', 'Logistic Map', 'Brownian Motion'])
+        self.stats = stats #np.array(['DET', 'LAM', 'L MAX', 'L MEAN', 'V MAX', 'V MEAN', 'L ENTR', 'V ENTR', 'DIV', 'TT'])
         
         # load pre-generated time series data
-        self.white_noise = np.load(get_resource_path("data/example_timeseries/white_noise_ts.npy"))
-        self.sine = np.load(get_resource_path("data/example_timeseries/sine_ts.npy"))
-        self.super_sine = np.load(get_resource_path("data/example_timeseries/super_sine_ts.npy"))
-        self.logi = np.load(get_resource_path("data/example_timeseries/logistic_map_ts.npy"))
-        self.brownian = np.load(get_resource_path("data/example_timeseries/brownian_ts.npy"))
-        self.signals_ts = [self.white_noise, self.sine, self.super_sine, self.logi, self.brownian]
+        # self.white_noise = np.load(get_resource_path("data/example_timeseries/white_noise_ts.npy"))
+        # self.sine = np.load(get_resource_path("data/example_timeseries/sine_ts.npy"))
+        # self.super_sine = np.load(get_resource_path("data/example_timeseries/super_sine_ts.npy"))
+        # self.logi = np.load(get_resource_path("data/example_timeseries/logistic_map_ts.npy"))
+        # self.brownian = np.load(get_resource_path("data/example_timeseries/brownian_ts.npy"))
+        self.signals_ts = [white_noise, sine, super_sine, logi, brownian]
         
-        self.colors, self.timeseries = {}, {}
-        self.rqa_vals = {}
-        ts_data = [self.white_noise, self.sine, self.super_sine, self.logi, self.brownian]
-        df = pd.read_csv(get_resource_path('data/characteristic_systems_rqa_exclude_theiler.csv'))
-        for i, s in enumerate(self.systems):
-            self.colors[s] = self.cmap[i]
-            self.timeseries[s] = ts_data[i]
-            self.rqa_vals[s] = {}
-            for stat, val in zip(df.columns, df.iloc[i].values):
-                self.rqa_vals[s][stat] = val
+        # self.colors, self.timeseries = {}, {}
+        # self.rqa_vals = {}
+        # ts_data = [self.white_noise, self.sine, self.super_sine, self.logi, self.brownian]
+        # df = pd.read_csv(get_resource_path('data/characteristic_systems_rqa_exclude_theiler.csv'))
+        # for i, s in enumerate(self.systems):
+        #     self.colors[s] = self.cmap[i]
+        #     self.timeseries[s] = ts_data[i]
+        #     self.rqa_vals[s] = {}
+        #     for stat, val in zip(df.columns, df.iloc[i].values):
+        #         self.rqa_vals[s][stat] = val
+        self.colors, self.timeseries, self.ts_data = colors, timeseries, ts_data
+        self.rqa_vals = characteristic_rqa_stats
                 
         self.ts1_type = Dropdown(options=self.systems, value='Brownian Motion', layout=Layout(width="200px"))
         self.ts2_type = Dropdown(options=self.systems, value='Sine', layout=Layout(width="200px"))

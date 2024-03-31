@@ -3,29 +3,41 @@
 import seaborn as sns
 import numpy as np
 import pandas as pd
+import sys
+import pkg_resources
+import subprocess
+
+### MODULES ###
+
 from .utils import *
+from .pyunicorn.timeseries import RecurrencePlot
+
+### PLOTTING ###
 
 import matplotlib.pyplot as plt
 from matplotlib_inline.backend_inline import set_matplotlib_formats
-set_matplotlib_formats('svg')
+from mpl_toolkits.axes_grid1 import make_axes_locatable
+from matplotlib.patches import Rectangle, FancyArrowPatch
+from matplotlib.backend_tools import Cursors
+from matplotlib.text import Annotation
+from mpl_toolkits.mplot3d.proj3d import proj_transform
+from mpl_toolkits.mplot3d.axes3d import Axes3D
 
 import matplotlib as mpl
 import matplotlib.font_manager as fm
-
-font= fm.FontEntry(
-    fname=get_resource_path("data/cmunrm.ttf"),
-    name='cmunrm')
+font= fm.FontEntry( fname=get_resource_path("data/cmunrm.ttf"), name='cmunrm')
 fm.fontManager.ttflist.insert(0, font)
 mpl.rcParams['font.family'] = font.name
 
+set_matplotlib_formats('svg')
 mpl.style.use(get_resource_path("data/standard.mplstyle"))
 
-from traitlets import dlink
-import numpy as np
+### WIDGETS ####
+
+from IPython.display import display, Javascript
 from ipywidgets import Layout, HBox, Box, VBox, IntSlider, FloatSlider, Dropdown, ToggleButton, ToggleButtons, Label, HTML
-import pandas as pd, sys
-from pyunicorn.timeseries import RecurrencePlot
-from mpl_toolkits.axes_grid1 import make_axes_locatable
+
+#### VARIABLES ####
 
 cmap = sns.color_palette("hls", 8).as_hex()[::-1][:5]
 systems = np.array(['White Noise', 'Sine', 'Sinusoid', 'Logistic Map', 'Brownian Motion'])
@@ -59,5 +71,6 @@ df = pd.read_csv(get_resource_path('data/characteristic_systems_rqa_exclude_thei
 for i, s in enumerate(systems):
     for stat, val in zip(df.columns, df.iloc[i].values):
         characteristic_rqa_stats[s][stat] = val
-        
+      
+### SETUP ###  
 setup_notebook()
