@@ -1,3 +1,0 @@
-[submodule "src/rqa/pyunicorn"]
-	path = src/rqa/pyunicorn
-	url = https://github.com/keriheuer/pyunicorn
