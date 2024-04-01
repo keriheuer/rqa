@@ -9,6 +9,8 @@ src/rqa/combine_timeseries.py
 src/rqa/config.py
 src/rqa/embedding.py
 src/rqa/generate_rps.py
+src/rqa/timeseries.py
+src/rqa/utils.py
 src/rqa/widgets.py
 src/rqa.egg-info/PKG-INFO
 src/rqa.egg-info/SOURCES.txt
@@ -133,7 +135,3 @@ src/rqa/pyunicorn/tests/test_eventseries/test_event_series.py
 src/rqa/pyunicorn/tests/test_funcnet/test_coupling_analysis.py
 src/rqa/pyunicorn/tests/test_timeseries/test_recurrence_plot.py
 src/rqa/pyunicorn/tests/test_timeseries/test_timeseries.py
-src/rqa/timeseries/__init__.py
-src/rqa/timeseries/timeseries.py
-src/rqa/utils/__init__.py
-src/rqa/utils/utils.py
