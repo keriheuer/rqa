@@ -1,0 +1,3 @@
+[submodule "pyunicorn"]
+	path = pyunicorn
+	url = https://github.com/keriheuer/pyunicorn
