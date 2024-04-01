@@ -24,7 +24,6 @@ dependencies = [
         'numpy',
         'matplotlib',
         'scipy',
-        #"scipy==1.11.2",
         "ipywidgets", 
         "pillow",  
         "traitlets",
@@ -32,7 +31,7 @@ dependencies = [
         "pandas",
         "ipympl",
         "ipyevents",
-        #"pyunicorn @ git+https://github.com/keriheuer/pyunicorn.git"
+        "pyunicorn @ git+https://github.com/keriheuer/pyunicorn.git"
     ]
 
 [project.urls]
