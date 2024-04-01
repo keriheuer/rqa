@@ -135,3 +135,4 @@ src/rqa/pyunicorn/tests/test_eventseries/test_event_series.py
 src/rqa/pyunicorn/tests/test_funcnet/test_coupling_analysis.py
 src/rqa/pyunicorn/tests/test_timeseries/test_recurrence_plot.py
 src/rqa/pyunicorn/tests/test_timeseries/test_timeseries.py
+src/rqa/utils/utils.py
