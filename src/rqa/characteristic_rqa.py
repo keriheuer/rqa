@@ -121,7 +121,7 @@ class CharacteristicRQA:
         plt.subplots_adjust(left=0.2, bottom=0.25, right=1)
        
         # register callbacks
-        self.rqa_stat.observe(self.update_bars, type="change") # names="value")
+        self.rqa_stat.observe(self.update_bars, type="change")
         
         return self.rqa_bar_plot.canvas
     

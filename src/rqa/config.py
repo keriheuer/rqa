@@ -12,6 +12,7 @@ import subprocess
 from IPython.display import display, Javascript
 from ipywidgets import Layout, HBox, Box, VBox, IntSlider, FloatSlider, Dropdown, ToggleButton, ToggleButtons, Label, HTML
 import ipyevents
+from traitlets import dlink
 
 ### PLOTTING ###
 
@@ -75,6 +76,7 @@ import matplotlib.font_manager as fm
 font= fm.FontEntry( fname=get_resource_path("data/cmunrm.ttf"), name='cmunrm')
 fm.fontManager.ttflist.insert(0, font)
 mpl.rcParams['font.family'] = font.name
+mpl.rcParams['text.usetex'] = True
 
 set_matplotlib_formats('svg')
 mpl.style.use(get_resource_path("data/standard.mplstyle"))
