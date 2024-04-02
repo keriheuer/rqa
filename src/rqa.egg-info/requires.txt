@@ -1,0 +1,11 @@
+numpy
+matplotlib
+scipy
+ipywidgets
+pillow
+traitlets
+seaborn
+pandas
+ipympl
+ipyevents
+pyunicorn@ git+https://github.com/keriheuer/pyunicorn.git
