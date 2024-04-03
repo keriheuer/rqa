@@ -2,15 +2,16 @@ from .config import *
 from traitlets import dlink
 
 col = Layout(display="flex", flex_direction="column", align_items="center", width="33.33%", overflow="visible")
-row = Layout(display="flex", flex_direction="row", width="100%", align_self="stretch", align_items="center", left="0", height="auto", text_align='left', overflow="visible")
+row = Layout(display="flex", flex_direction="row", width="100%", align_self="stretch", align_items="center", align_content="center", left="0", height="auto", text_align='left', overflow="visible")
 col_align_left = Layout(display="flex", flex_direction="row", width="100%", align_self="flex-start", left="0", height="60px", text_align='center', align_items="center", overflow="visible")
 
 widget_layout = Layout(width='100%', height='25px', margin="5px", overflow="visible")
 
-button_layout = Layout(width='auto', max_width="200px", height='25px', margin="10px")
+button_layout = Layout(width='auto', max_width="200px", height='25px', max_height="25px", margin="10px 10px 10px 0")
+toggle_button_layout = Layout(height="25px",max_height="25px", margin="10px", width="fit-content", display="flex")
 
 ui_layout = Layout(display="flex", height="350px", flex_flow="column", overflow="visible",
-    align_items="center", justify_content="center", width="50%")
+    align_items="center", justify_content="center", width="fit-content")
 
 horizontal_layout = Layout(display="flex", flex_flow="row", height="350px", overflow="visible",
     align_items="center", justify_content="center")
@@ -394,9 +395,25 @@ def set_css():
       
         .jupyter-matplotlib-figure {
   height: 100%}
-  .jupyter-widgets jupyter-matplotlib-canvas-div canvas {
+  .jupyter-widgets.jupyter-matplotlib-canvas-div canvas {
   bottom: 0 !important;
   top: unset !important}
+  
+  // hide resizing arrow
+  .jupyter-widgets.jupyter-matplotlib-canvas-container > .jupyter-widgets.jupyter-matplotlib-canvas-div > canvas:last-child {
+    display: none
+  }
+  
+  // resize matplotlib widget plots to be height of figure
+  .lm-Widget.p-Widget.jupyter-matplotlib {
+    height: fit-content
+  }
+
+// vertically align widgets in a row 
+  .lm-Widget.p-Widget.lm-Panel.p-Panel.jupyter-widgets.widget-container.widget-box.widget-hbox {
+    display: flex;
+    align-items: center;
+  }
 
   .ipyevents-watched:focus {
     outline-width: '0' !important;
@@ -503,7 +520,7 @@ def setup_notebook():
       font-size: 12px;
       }
       
-      div.prompt:empty
+      div.prompt:empty {}
       
       .text_cell_render .rendered_html > p:not(.fw) {
         align-self: center;
@@ -564,7 +581,7 @@ def setup_notebook():
       top: calc((var(--jp-widgets-slider-track-thickness) - 12px) / 2);
       width: 12px;
       height: 12px;
-      background: #0957b5;
+      background: #1c1c1c;
       opacity: 0.95;
       }
 
@@ -579,7 +596,7 @@ def setup_notebook():
       }
 
       .jupyter-button.mod-active {
-      background-color: #0957b5;
+      background-color: #1c1c1c;
       color: white;
       opacity: 0.95;
       }

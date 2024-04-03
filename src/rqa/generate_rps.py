@@ -25,6 +25,8 @@ class GenerateRPs:
     
     def __init__(self):
         
+        setup_notebook()
+        
         # parameters and variables
         self.rqa_vals = pd.read_csv(get_resource_path('data/characteristic_rqa_stats_exclude_theiler.csv'), index_col=0).to_dict(orient='index')
         self.stats = {'DET': 'Determinism', 'LAM': 'Laminarity', 'L MAX': 'Longest Diagonal Line Length', 
