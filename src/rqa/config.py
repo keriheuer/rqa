@@ -29,9 +29,8 @@ from matplotlib.colors import to_rgb
 
 ### MODULES ###
 
-from .utils import *
 from pyunicorn.timeseries import RecurrencePlot
-
+from .utils import *
 
 #### VARIABLES ####
 
