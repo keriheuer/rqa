@@ -25,6 +25,8 @@ class GenerateRPs:
         self.adjust_widget_layouts()
         self.display_widgets() 
         
+        if in_notebook(): plt.ioff()
+        
     def create_widgets(self):
         
         # LOGISTIC MAP PARAMETERS

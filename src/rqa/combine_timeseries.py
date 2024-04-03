@@ -3,7 +3,9 @@ from .config import *
 class CombineTimeseries():
 
     def __init__(self):
-
+        
+        if in_notebook(): plt.ioff()
+         
         self.cmap = cmap 
         self.systems = systems
         self.stats = stats 

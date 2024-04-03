@@ -3,7 +3,7 @@ from .config import *
 class CharacteristicRQA:
     
     def __init__(self):
-        plt.ioff()
+        if in_notebook(): plt.ioff()
         
         # create characteristic RP plots
         self.zoomed = False
