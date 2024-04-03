@@ -7,5 +7,6 @@ from .characteristic_rqa import CharacteristicRQA
 from .generate_rps import GenerateRPs
 from .combine_timeseries import CombineTimeseries
 # from .embedding import EmbeddingParameters
+from . import config
 from . import timeseries
 from . import utils
