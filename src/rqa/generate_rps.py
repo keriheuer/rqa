@@ -109,7 +109,7 @@ class GenerateRPs:
         self.dim = create_slider(1, 1, 10, 1, 'Embedding Dimension (𝑚)').add_class("pad-slider")
         self.normalize = ToggleButton(description="Normalize time series", value=True, layout=button_layout, style=style).add_class('flush-left')
         self.metric = ToggleButtons(options=['Euclidean', 'Manhattan', 'Supremum'], style=style, layout=button_layout).add_class('no-margins')
-        self.metric_label = Label('Distance Metric', layout=layout, style=style).add_class("flush-left shrink-vertical-margin")
+        self.metric_label = Label('Distance Metric', layout=toggle_button_layout, style=style).add_class("flush-left shrink-vertical-margin ")
         self.RR = create_slider(0.15, 0.01, 0.99, 0.01, "Recurrence Rate (𝑅𝑅)")
         self.which_RR = ToggleButtons(options=['Global 𝑅𝑅', 'Local 𝑅𝑅'], style=style, layout=button_layout).add_class('no-margins')
         self.threshold = ToggleButton(description='Threshold 𝑅𝑃', value=False, layout=button_layout, style=style)

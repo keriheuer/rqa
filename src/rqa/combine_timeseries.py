@@ -2,10 +2,10 @@ from .config import *
 from .utils import *
 
 col = Layout(display="flex", flex_direction="column", align_items="center", width="33.33%")
-row = Layout(display="flex", flex_direction="row", width="100%", align_self="stretch", left="0", height="auto", text_align='left')
+row = Layout(display="flex", flex_direction="row", width="100%", align_self="stretch", left="0", height="auto", text_align='left', align_items="center")
 col_align_left = Layout(display="flex", flex_direction="row", width="100%", align_self="flex-start", left="0", height="60px", text_align='center', align_items="center")
 widget_layout = Layout(width='100%', height='25px', margin="5px")
-button_layout = Layout(width='auto', max_width="250px", height='25px', margin="10px")
+button_layout = Layout(width='auto', max_width="250px", height='50px', margin="10px")
 ui_layout = Layout(display="flex", height="350px", flex_flow="column", overflow="visible",
     align_items="center", justify_content="center", width="45%")
 horizontal_layout = Layout(display="flex", flex_flow="row", height="350px", overflow= "visible",
@@ -80,16 +80,16 @@ class CombineTimeseries():
         self.spliced_rqa_stat = Dropdown(options=['DET', 'LAM', 'RR', 'L MAX', 'L MEAN', 'L ENTR', 'DIV', 'V MAX', 'TT',  'V ENTR'], value='DET',
                                             layout=Layout(width="150px", align_self="flex-end", bottom="0", font_size="16px"))
         
-        self.sig1 = HTML(value='<p style="font-size: 18px"><font color="%s">' % self.colors[self.ts1_type.value] + '%s' % self.ts1_type.value + '</font></p>', layout=Layout(font_size="18px"))
-        self.sig2 = HTML(value='<p style="font-size: 18px"><font color="%s">' % self.colors[self.ts2_type.value] + '%s' % self.ts2_type.value + '</font></p>', layout=Layout(font_size="18px"))
-        self.sig3 = HTML(value='<p style="font-size: 18px"><font color="%s">' % self.colors[self.ts3_type.value] + '%s' % self.ts3_type.value + '</font></p>', layout=Layout(font_size="18px"))
+        self.sig1 = HTML(value='<p style="font-size: 18px"><font color="%s">' % self.colors[self.ts1_type.value] + '%s' % self.ts1_type.value + '</font></p>')
+        self.sig2 = HTML(value='<p style="font-size: 18px"><font color="%s">' % self.colors[self.ts2_type.value] + '%s' % self.ts2_type.value + '</font></p>')
+        self.sig3 = HTML(value='<p style="font-size: 18px"><font color="%s">' % self.colors[self.ts3_type.value] + '%s' % self.ts3_type.value + '</font></p>')
         
-        self.sig1_rqa = HTML("", style=style, continuous_update=False, layout=Layout(font_size="18px"))
-        self.sig2_rqa = HTML("", style=style, continuous_update=False, layout=Layout(font_size="18px"))
-        self.sig3_rqa = HTML("", style=style, continuous_update=False, layout=Layout(font_size="18px"))
+        self.sig1_rqa = HTML('<p style="font-size: 18px; margin: 0">', style=style, continuous_update=False)
+        self.sig2_rqa = HTML('<p style="font-size: 18px; margin-top: 0px">', style=style, continuous_update=False)
+        self.sig3_rqa = HTML('<p style="font-size: 18px; margin-top: 0px">', style=style, continuous_update=False)
         
-        self.full_spliced = HTML('<p style="font-size: 18px">Combined</p>', style=style, layout=Layout(font_size="18px"))
-        self.full_spliced_rqa = HTML("", style=style, continuous_update=False, layout=Layout(font_size="18px"))
+        self.full_spliced = HTML('<p style="font-size: 18px">Combined</p>', style=style)
+        self.full_spliced_rqa = HTML('<p style="font-size: 18px; margin-top: 0px">', style=style, continuous_update=False)
         
         for w in [self.sig1_rqa, self.sig2_rqa, self.sig3_rqa, self.full_spliced_rqa]:
             w.layout.margin = "10px 0 0 0"
@@ -141,7 +141,7 @@ class CombineTimeseries():
             for widget in [self.spliced_tau_slider, self.spliced_dim_slider, self.spliced_rr_slider, self.spliced_rqa_stat]:
                 widget.observe(callback, type="change")
         
-        display(HTML("<style>.container { width:100% !important; } div.output_subarea {padding: 2em 0 0;} .jupyter-matplotlib {height:fit-content; width:fit-content} .widget-html > .widget-html-content {line-height: 20px; height: 20px;} .jupyter-widgets label {line-height: 25px; height: 25px; min-width: 16px !important; width: fit-content !important; margin-right: 2px !important} .widget-hslider .slider-container, .jupyter-widget-hslider .slider-container {margin-left: 10px !important} </style>"))
+        display(HTML("<style>.container { width:100% !important; } .widget-inline-hbox.widget-html, p, .widget-html-content {margin: 0} div.output_subarea {padding: 2em 0 0;} .jupyter-matplotlib {height:fit-content; width:fit-content} .widget-html > .widget-html-content {line-height: 20px; height: 20px;} .jupyter-widgets label {line-height: 25px; height: 25px; min-width: 16px !important; width: fit-content !important; margin-right: 2px !important} .widget-hslider .slider-container, .jupyter-widget-hslider .slider-container {margin-left: 10px !important} </style>"))
     
     def setup_plots(self):
 
@@ -222,7 +222,7 @@ class CombineTimeseries():
         # update RQA val
         rp_instance, rp_matrix = get_rp_matrix(new_ts, self.spliced_rr_slider.value, tau=self.spliced_tau_slider.value, dim=self.spliced_dim_slider.value)
         rqa_val = get_rqa_stat(rp_instance, self.spliced_rqa_stat.value, theiler=self.spliced_tau_slider.value*self.spliced_dim_slider.value, l_min=2, v_min=2)
-        self.sig1_rqa.value = '<p style="font-size: 18px; margin-top: 10px">%s</p>' % rqa_val
+        self.sig1_rqa.value = '<p style="font-size: 18px; margin: 0">%s</p>' % rqa_val
         
     def update_splice2(self, *args):
 
@@ -251,7 +251,7 @@ class CombineTimeseries():
         # update RQA val
         rp_instance, rp_matrix = get_rp_matrix(self.splice2.get_ydata(), self.spliced_rr_slider.value, tau=self.spliced_tau_slider.value, dim=self.spliced_dim_slider.value)
         rqa_val = get_rqa_stat(rp_instance, self.spliced_rqa_stat.value, theiler=self.spliced_tau_slider.value*self.spliced_dim_slider.value, l_min=2, v_min=2)
-        self.sig2_rqa.value = '<p style="font-size: 18px; margin-top: 10px">%s</p>' % rqa_val
+        self.sig2_rqa.value = '<p style="font-size: 18px; margin: 0">%s</p>' % rqa_val
         
 
     def update_splice3(self, *args):
@@ -282,7 +282,7 @@ class CombineTimeseries():
         # update RQA
         rp_instance, rp_matrix = get_rp_matrix(self.splice3.get_ydata(), self.spliced_rr_slider.value, tau=self.spliced_tau_slider.value, dim=self.spliced_dim_slider.value)
         rqa_val = get_rqa_stat(rp_instance, self.spliced_rqa_stat.value, theiler=self.spliced_tau_slider.value*self.spliced_dim_slider.value, l_min=2, v_min=2)
-        self.sig3_rqa.value = '<p style="font-size: 18px; margin-top: 10px">%s</p>' % rqa_val
+        self.sig3_rqa.value = '<p style="font-size: 18px; margin: 0">%s</p>' % rqa_val
 
     def redraw_ts(self, idle=True):
                 

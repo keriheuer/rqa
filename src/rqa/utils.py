@@ -472,7 +472,7 @@ def create_slider(value, min, max, step, description="", label="", fmt=""):
     slider_type = FloatSlider if "." in str(step) else IntSlider
     fmt = "%.2f" if "." in str(step) and not fmt else "%d" if "." not in str(step) and not fmt else "%s"
     slider = slider_type(value=value, min=min, max=max, step=step, description=description, continuous_update=False, readout=False, layout=slider_layout, style=style)
-    label = Label(label if label else str(value))
+    label = Label(label if label else str(value), layout=Layout(height="25px"))
     dlink((slider, "value"), (label, "value"), lambda x: fmt % x)
     return HBox([slider, label])
 
@@ -557,10 +557,12 @@ def setup_notebook():
       }
 
       :root {
+        --jp-widgets-slider-handle-size: 14px !important;
       --jp-widgets-inline-label-width: 25px !important;
       --jp-widgets-margin: 5px !important;
       --jp-border-color1: black !important;
-      --jp-widgets-dropdown-arrow: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBpZD0iTGF5ZXJfMiIgZGF0YS1uYW1lPSJMYXllciAyIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOSAxMCI+CiAgPGRlZnM+CiAgICA8c3R5bGU+CiAgICAgIC5jbHMtMSB7CiAgICAgICAgc3Ryb2tlLXdpZHRoOiAwcHg7CiAgICAgIH0KICAgIDwvc3R5bGU+CiAgPC9kZWZzPgogIDxnIGlkPSJMYXllcl8xLTIiIGRhdGEtbmFtZT0iTGF5ZXIgMSI+CiAgICA8cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0xOC4xNS4xNWMuMi0uMi41MS0uMi43MSwwLC4yLjIuMi41MSwwLC43MWwtOSw5Yy0uMi4yLS41MS4yLS43MSwwTC4xNS44NUMtLjA1LjY2LS4wNS4zNC4xNS4xNS4zNC0uMDUuNjYtLjA1Ljg1LjE1bDguNjUsOC42NUwxOC4xNS4xNVoiLz4KICA8L2c+Cjwvc3ZnPg==")}
+      --jp-widgets-dropdown-arrow: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBpZD0iTGF5ZXJfMiIgZGF0YS1uYW1lPSJMYXllciAyIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOSAxMCI+CiAgPGRlZnM+CiAgICA8c3R5bGU+CiAgICAgIC5jbHMtMSB7CiAgICAgICAgc3Ryb2tlLXdpZHRoOiAwcHg7CiAgICAgIH0KICAgIDwvc3R5bGU+CiAgPC9kZWZzPgogIDxnIGlkPSJMYXllcl8xLTIiIGRhdGEtbmFtZT0iTGF5ZXIgMSI+CiAgICA8cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0xOC4xNS4xNWMuMi0uMi41MS0uMi43MSwwLC4yLjIuMi41MSwwLC43MWwtOSw5Yy0uMi4yLS41MS4yLS43MSwwTC4xNS44NUMtLjA1LjY2LS4wNS4zNC4xNS4xNS4zNC0uMDUuNjYtLjA1Ljg1LjE1bDguNjUsOC42NUwxOC4xNS4xNVoiLz4KICA8L2c+Cjwvc3ZnPg==")
+      }
 
       .toggle-button, .widget-toggle-button {
       width: fit-content !important;
@@ -579,11 +581,9 @@ def setup_notebook():
 
       .widget-slider .noUi-handle, .jupyter-widget-slider .noUi-handle {
       border: none;
-      top: calc((var(--jp-widgets-slider-track-thickness) - 12px) / 2);
-      width: 12px;
-      height: 12px;
-      background: #1c1c1c;
-      opacity: 0.95;
+      --jp-widgets-slider-handle-size: 14px;
+      background: cornflowerblue; //var(--jp-brand-color2);
+      opacity: 1;
       }
 
       .widget-slider .noUi-handle:hover {
@@ -595,23 +595,47 @@ def setup_notebook():
       background: none;
       border: 1px solid black;
       }
+      
+      .widget-slider .noUi-target:not([disabled]) .noUi-handle:hover, .widget-slider .noUi-target:not([disabled]) .noUi-handle:focus {
+        background-color: black;
+      }
 
       .jupyter-button.mod-active {
-      background-color: #1c1c1c;
-      color: white;
-      opacity: 0.95;
+      background-color: var(--jp-brand-color1);
+      color: black;
+      opacity: 1;
+      border: 1px solid black;
       }
 
       .jupyter-button {
-          border: 1px solid;
+          border: 1px solid black;
           height: 30px;
-          background-color: white
       }
 
       .jupyter-widgets .widget-dropdown > select {
       border: 1px solid black;
       background-position: right 8px center;}
+      
+      
+      // hide resizing arrow
+  .jupyter-widgets.jupyter-matplotlib-canvas-container > .jupyter-widgets.jupyter-matplotlib-canvas-div > canvas:last-child {
+    display: none !important
+  }
+  
+  // resize matplotlib widget plots to be height of figure
+  .jupyter-matplotlib  > .jupyter-matplotlib {
+    height: fit-content !important
+  }
 
+// vertically align widgets in a row 
+  .lm-Widget.p-Widget.lm-Panel.p-Panel.jupyter-widgets.widget-container.widget-box.widget-hbox {
+    display: flex !important;
+    align-items: center !important;
+  }
+  
+  .jupyter-widgets.widget-container.widget-box.widget-hbox {
+    align-items: center !important;
+  }
       </style>"""))
             
 class RecurrenceMetrics:
