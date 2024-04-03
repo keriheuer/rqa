@@ -138,7 +138,7 @@ class GenerateRPs:
             self.label2, HBox([self.metric_label, self.metric], style=style), self.RR, 
             HBox([Label("For 𝑅𝑄𝐴, threshold by", layout=layout, style=style).add_class("flush-left shrink-vertical-margin"), self.which_RR], style=style),
             self.threshold, self.label3, self.theiler, self.lmin, self.vmin],
-            layout=Layout(width="400px", overflow="visible", margin_right="50px"))
+            layout=Layout(width="fit-content", overflow="visible", margin_right="50px"))
         
         # widgets to display RQA stats
         self.det = create_text("Determinism:")
