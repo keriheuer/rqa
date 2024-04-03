@@ -1,27 +1,27 @@
 from .config import *
 from traitlets import dlink
 
-col = Layout(display="flex", flex_direction="column", align_items="center", width="33.33%")
-row = Layout(display="flex", flex_direction="row", width="100%", align_self="stretch", left="0", height="auto", text_align='left')
-col_align_left = Layout(display="flex", flex_direction="row", width="100%", align_self="flex-start", left="0", height="60px", text_align='center', align_items="center")
+col = Layout(display="flex", flex_direction="column", align_items="center", width="33.33%", overflow="visible")
+row = Layout(display="flex", flex_direction="row", width="100%", align_self="stretch", align_items="center", left="0", height="auto", text_align='left', overflow="visible")
+col_align_left = Layout(display="flex", flex_direction="row", width="100%", align_self="flex-start", left="0", height="60px", text_align='center', align_items="center", overflow="visible")
 
-widget_layout = Layout(width='100%', height='25px', margin="5px")
+widget_layout = Layout(width='100%', height='25px', margin="5px", overflow="visible")
 
-button_layout = Layout(width='auto', max_width="250px", height='25px', margin="10px")
+button_layout = Layout(width='auto', max_width="200px", height='25px', margin="10px")
 
 ui_layout = Layout(display="flex", height="350px", flex_flow="column", overflow="visible",
-    align_items="center", justify_content="center", width="45%")
+    align_items="center", justify_content="center", width="50%")
 
-horizontal_layout = Layout(display="flex", flex_flow="row", height="350px", overflow= "visible",
+horizontal_layout = Layout(display="flex", flex_flow="row", height="350px", overflow="visible",
     align_items="center", justify_content="center")
 
-vertical_layout = Layout(display="flex", flex_flow="column", height="350px", overflow= "visible",
+vertical_layout = Layout(display="flex", flex_flow="column", height="350px", overflow="visible",
     align_items="center", justify_content="center")
 
 label_layout = Layout(display="flex", flex_flow="row", align_items="center", justify_content="center", overflow="visible",
     width="100%", text_align="center", height='40px', margin="10px")
 
-slider_layout = Layout(min_width="350px", overflow="visible")
+slider_layout = Layout(width="150px", overflow="visible")
 
 dropdown_layout = Layout(max_width="200px", overflow="visible")
 
@@ -29,7 +29,7 @@ style = {'description_width': 'initial', "button_width": "auto", 'overflow':'vis
             'white-space': 'nowrap', 'button_color': 'lemonchiffon', 'handle_color': 'cornflowerblue'}
 
 # explicitly set width and height
-layout = Layout(width='auto', height='25px', display="flex", margin="10px")
+layout = Layout(width='auto', height='25px', display="flex", margin="10px", overflow="visible")
 
 # function to get the full path of files in the package
 def get_resource_path(relative_path):
@@ -230,8 +230,8 @@ def splice_timeseries(self):
   return spliced
 
 
-def get_rp_matrix(ts, RR, tau=1, dim=1):
-  rp = RecurrencePlot(ts, metric="euclidean", recurrence_rate=RR, silence_level=2, tau=tau, dim=dim)
+def get_rp_matrix(ts, RR, metric="euclidean", tau=1, dim=1):
+  rp = RecurrencePlot(ts, metric=metric, recurrence_rate=RR, silence_level=2, tau=tau, dim=dim)
   return rp, rp.recurrence_matrix()
 
 def plot_rp_matrix(ax, rp):
@@ -436,7 +436,7 @@ def setStyles():
         display(Javascript('''google.colab.output.setIframeWidth(0, true, {maxWidth: 500})'''))
         fix_colab_outputs()
 
-        # register custom widgets (bqplot)
+        # register custom widgets (Jupyter widgets)
         from google.colab import output
         output.enable_custom_widget_manager()
         
@@ -453,7 +453,7 @@ def create_slider(value, min, max, step, description="", label="", fmt=""):
     # Helper function to create a slider and its label
     slider_type = FloatSlider if "." in str(step) else IntSlider
     fmt = "%.2f" if "." in str(step) and not fmt else "%d" if "." not in str(step) and not fmt else "%s"
-    slider = slider_type(value=value, min=min, max=max, step=step, description=description, continuous_update=False, readout=False, layout=slider_layout)
+    slider = slider_type(value=value, min=min, max=max, step=step, description=description, continuous_update=False, readout=False, layout=slider_layout, style=style)
     label = Label(label if label else str(value))
     dlink((slider, "value"), (label, "value"), lambda x: fmt % x)
     return HBox([slider, label])
@@ -465,30 +465,26 @@ def create_text(value):
 
 def create_col_center(*items):
   return VBox([*items], layout=Layout(display="flex", flex_direction="column", width="300px",
-            align_self="center", justify_content="center", overflow="visible", align_items="flex-start"))
+            align_self="center", justify_content="center", overflow="visible", align_items="flex-start"), style=style)
   
 def create_row(*items):
   return HBox([*items], layout=Layout(display="flex", flex_direction="row", justify_content="space-between",
-            align_items="center", overflow="visible", margin="12px 0 0 0"))
+            align_items="center", overflow="visible", margin="12px 0 0 0"), style=style)
   
 def create_row_stretch(*items):  
   return HBox([*items],
-                    layout=Layout(width="1300px", display="flex", flex_direction="row", justify_items="center", align_items='stretch', overflow="visible")).add_class("row-stretch")
+                    layout=Layout(width="1300px", display="flex", flex_direction="row", justify_items="center", align_items='stretch', overflow="visible", style=style)).add_class("row-stretch")
 
 def in_notebook():
-    try:
-        from IPython import get_ipython
-        if 'IPKernelApp' not in get_ipython().config:  # pragma: no cover
-            return False
-          
-        elif get_ipython().__class__.__module__ != "google.colab._shell":  # check if Colab notebook
-          return False
-          
-    except ImportError:
-        return False
-    except AttributeError:
-        return False
-    return True
+  try:
+      from IPython import get_ipython
+      if 'IPKernelApp' in get_ipython().config:  # jupyter notebook
+          return True
+      
+      elif get_ipython().__class__.__module__ != "google.colab._shell":  # Google Colab
+          return True
+  except: 
+      return False
   
 def setup_notebook():
   if in_notebook():
