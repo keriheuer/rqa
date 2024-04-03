@@ -1,9 +1,31 @@
 from .config import *
+from .utils import *
+
+col = Layout(display="flex", flex_direction="column", align_items="center", width="33.33%")
+row = Layout(display="flex", flex_direction="row", width="100%", align_self="stretch", left="0", height="auto", text_align='left')
+col_align_left = Layout(display="flex", flex_direction="row", width="100%", align_self="flex-start", left="0", height="60px", text_align='center', align_items="center")
+widget_layout = Layout(width='100%', height='25px', margin="5px")
+button_layout = Layout(width='auto', max_width="250px", height='25px', margin="10px")
+ui_layout = Layout(display="flex", height="350px", flex_flow="column", overflow="visible",
+    align_items="center", justify_content="center", width="45%")
+horizontal_layout = Layout(display="flex", flex_flow="row", height="350px", overflow= "visible",
+    align_items="center", justify_content="center")
+vertical_layout = Layout(display="flex", flex_flow="column", height="350px", overflow= "visible",
+    align_items="center", justify_content="center")
+label_layout = Layout(display="flex", flex_flow="row", align_items="center", justify_content="center", overflow="visible",
+    width="100%", text_align="center", height='40px', margin="10px")
+slider_layout = Layout(min_width="350px", overflow="visible")
+dropdown_layout = Layout(max_width="200px", overflow="visible")
+style = {'description_width': 'initial', "button_width": "auto", 'overflow':'visible',
+            'white-space': 'nowrap', 'button_color': 'lemonchiffon', 'handle_color': 'cornflowerblue'}
+layout = Layout(width='auto', height='25px', display="flex", margin="10px")
 
 class CombineTimeseries():
 
     def __init__(self):
-
+        
+        if in_notebook(): plt.ioff()
+         
         self.cmap = cmap 
         self.systems = systems
         self.stats = stats 
@@ -130,7 +152,7 @@ class CombineTimeseries():
         self.combined_ts, self.combined_ts_ax = self.create_default_fig(7, 4, xlabel=x, ylabel=y, margins=margins, layout="constrained", ticks=True) #position=position,
     
         # normalize the data to same scale
-        spliced = [self.brownian, self.sine, self.white_noise]
+        spliced = [brownian, sine, white_noise]
         T = 300
         spliced = [normalize(s[:T], n) for s,n in zip(spliced, ['Brownian Motion', 'Sine', 'White Noise'])]
 
