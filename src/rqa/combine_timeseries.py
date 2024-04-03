@@ -23,7 +23,7 @@ layout = Layout(width='auto', height='25px', display="flex", margin="10px")
 class CombineTimeseries():
 
     def __init__(self):
-        
+        setup_notebook()
         if in_notebook(): plt.ioff()
          
         self.cmap = cmap 
