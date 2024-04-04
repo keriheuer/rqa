@@ -1,294 +1,202 @@
-class TimeDelayAnimation:
-    def __init__(self):
-        # Initialize parameters and widgets
-        self.t = 0
-        self.delta_t = 2
-        self.m = 3
-        self.scaling_factor = 10
-        self.scatter_x = []
-        self.scatter_y = []
-        self.colors = plt.cm.cool(np.linspace(0, 1, dimension_slider.max))
-        self.hex_colors_stripped = ['#dd1c77']
-        self.extra_colors = [list(to_rgb(h.upper()))+[1] for h in self.hex_colors_stripped]
-        
-        self.delays = np.arange(0, 50*dimension_slider.value, 50)
-        self.yticks = [7.5 + (2.5 * i) for i in range(3)] #dimension_slider.value)]
 
-        self.frequency = 5  # Adjust frequency for 5 periods in the plot
-        self.T = 10  # You can adjust this if you want to scale the time axis
-        self.x_values = np.linspace(0, 2 * np.pi, 201)  # 200 points for the x_values
-        self.sine_wave = np.sin(2 * np.pi * self.frequency * self.x_values / self.T)  # Adjusted sine_wave
-        self.t_values = np.arange(0, 201)
-        
-        self.create_widgets()
-        
-        # Initialize static plot comparing x1, x2, x3
-        plt.ioff()
-        self.fig = plt.figure(figsize=(8, 5), layout='compressed')
-        self.fig.canvas.toolbar_visible = False
-        self.fig.canvas.header_visible = False
-        self.fig.canvas.footer_visible = False
-        self.fig.canvas.resizable = False
-        self.ax = self.fig.add_subplot(1, 2, 1)
-        self.ax.margins(x=0.02, y=0.2)
-        self.ax.tick_params(which="both", axis="y", left=False, labelleft=True)
-        self.ax.tick_params(which="both", axis="x", top=True)
-        # set custom color cycle
-        self.ax.set_prop_cycle('color', self.extra_colors + list(self.colors))
-                # set initial tick labels
-        self.ax.set_xlabel('Time (arb. units)')
-        self.ax.set_yticks(yticks)
-        self.ax.set_yticklabels([r'Original ($x_1$)'] + [r'$x_%d = x_1 + %d\tau$' % (i+2, i+1) if i != 0 else r'$x_2 = x_1 + \tau$' for i in range(2)]) #dimension_slider.value - 1)])
-        
+import numpy as np
+from sklearn.feature_selection import mutual_info_regression
+import matplotlib.pyplot as plt
+from statsmodels.tsa.stattools import acf
+import pandas as pd
+from sklearn.metrics import mutual_info_score
+from sklearn.neighbors import NearestNeighbors
+from sklearn.metrics import mutual_info_score
+from scipy.stats import entropy
 
-        # Initialize plot w/ animation
-        plt.ioff()
-        self.fig2 = plt.figure(figsize=(8, 10))
-        self.fig2.canvas.toolbar_visible = False
-        self.fig2.canvas.header_visible = False
-        self.fig2.canvas.footer_visible = False
-        self.fig2.canvas.resizable = False
-        self.ax2 = self.fig.add_subplot(1, 2, 1)
-        self.ax2.margins(x=0.02, y=0.2)
-        self.ax2.tick_params(which="both", axis="both", left=False, labelleft=True, bottom=False, labelbottom=True)
-        self.ax2.spines[['right', 'top']].set_visible(False)
-        self.ax2.set_title(r'(x$_1$, x$_2$, x$_3$)')
-            
-        # 3D subplot
-        self.ax3 = self.fig2.add_subplot(1, 2, 2, projection='3d')  
-        self.ax3.set_title(r'State Space $S(\vec{x})$')
-        self.ax3.margins(x=0.03, y=0.03)
+from matplotlib_inline.backend_inline import set_matplotlib_formats
+set_matplotlib_formats('svg')
 
-        # set custom color cycle
-        self.ax3.set_prop_cycle('color', self.extra_colors + list(self.colors))
-
-        # Now that self.fig is defined, plot initial state and connect events
-        self.init_plot()
-        self.connect_events()
-        
-        # Initialize animation
-        self.total_frames = self.calculate_total_frames()  # Calculate total frames
-        self.ani = FuncAnimation(self.fig, self.update, frames=self.total_frames,
-                                interval=1000, init_func=self.init_plot, blit=False, repeat=True)
-        plt.show()
-        
-        
-    def init_plot(self):
-        """  Sets up the initial state of the plot """
-        
-        # Initialize a list to store the 3D scatter points
-        self.scatter_points_3d = []
-
-        # Clear the axes for the reset
-        self.ax2.clear()
-        self.ax3.clear()
-        
-        # Plot sine wave
-        self.ax2.plot(self.sine_wave) #self.x_values, self.sine_wave)
-        
-        # Configure x-axis major ticks
-        self.ax2.xaxis.set_major_locator(plt.MultipleLocator(10))
-        
-        # Plot y=0 line
-        for y in [-1, 0, 1]: self.ax2.axhline(y=y, color='grey', alpha=0.3, linestyle=':')
+def embed_time_series(ts, tau, dim):
+    """
+    Embed a time series with given dimension and time delay.
     
-        # Initialize scatter points for sine wave
-        self.scatter = self.ax2.scatter([], [], c=[], zorder=3)
-        self.vlines = self.ax2.vlines([], 0, [], zorder=2)
-        
-        # Initialize 3D scatter
-        self.scatter3d = self.ax3.scatter([], [], [], c='black')
-        
-        # Initialize annotations
-        self.annotations = [self.ax2.annotate('', (0,0), textcoords="offset points", xytext=(5,5), ha='right') for _ in range(3)]
-        
-        # Set plot limits and labels
-        self.ax2.set_ylim(-1.1, 1.1)
-        
-        self.ax3.set_xlim(-1.1, 1.1)
-        self.ax3.set_ylim(-1.1, 1.1)
-        self.ax3.set_zlim(-1.1, 1.1)
-        
-        self.ax2.set_xlabel(r'$t_{rest}$ (arb. units)')
-        self.ax2.set_ylabel('Amplitude')
-        title = r'$\mathbf{\vec{x}}=$(' + ", ".join([r"$x_%d$" % (i+1) for i in range(3) ]) + r")"
-        time = r"$\mathbf{t_{rest}=0}$"
-        title1 = self.ax2.set_title(title, fontsize=14, loc='center')
-        title2 = self.ax2.set_title(time, fontsize=14, loc='right', color='r')
-        
-         # Return a list of artists to be drawn
-        return self.scatter, self.vlines, self.scatter3d, *self.annotations
-    
-       
-    def update(self, frame):
-        """ Update scatter points, sine wave, annotations, and 3D scatter """
-        self.t = (int(frame) * self.scaling_factor) % len(self.sine_wave)
+    :param ts: 1D NumPy array or list containing the time series.
+    :param dim: The embedding dimension.
+    :param tau: The time delay (lag).
+    :return: 2D NumPy array containing the embedded time series.
+    """
+    n = len(ts)
+    if n < (dim - 1) * tau + 1:
+        raise ValueError("Time series is too short for the given dimension and time delay")
 
-        # Ensure delta_t is an integer and apply the scaling factor
-        delta_t_scaled = int(self.delta_t) * self.scaling_factor
+    embedded_ts = np.empty((n - (dim - 1) * tau, dim))
+    for i in range(dim):
+        embedded_ts[:, i] = ts[i * tau: n - (dim - 1) * tau + i * tau]
+    return embedded_ts
 
-        # Calculate the indices for y-values without the modulus operator
-        # The modulus is not needed here if we are sure that frame will not produce an out-of-bounds index
-        idx1 = self.t
-        idx2 = self.t + delta_t_scaled
-        idx3 = self.t + 2 * delta_t_scaled
-            
-        # Get the y-values for the 3D scatter plot
-        y1 = self.sine_wave[idx1]
-        y2 = self.sine_wave[idx2]
-        y3 = self.sine_wave[idx3]
-        self.scatter_x.append(idx3)
-        self.scatter_y.append(y3)
+def compute_ami(time_series, max_delay):
+    """Compute average mutual information for different time delays."""
+    ami_values = []
+    for delay in range(1, max_delay + 1):
+        ami = mutual_info_score(time_series[:-delay], time_series[delay:])
+        ami_values.append(ami)
+    return np.array(ami_values)
 
-        colors = plt.cm.jet(np.linspace(0, 1, self.m))
-        
-        # Update 2D scatter plot
-        x_scatter = self.t_values[[idx1, idx2, idx3][:self.m]]  # Get x-values for scatter points
-        y_scatter = [y1, y2, y3][:self.m]  # Get y-values for scatter points
-        self.scatter.set_offsets(np.column_stack([x_scatter, y_scatter]))
-        self.scatter.set_color(colors)
-        
-        # Update vertical lines
-        self.vlines.set_segments([[[x, 0], [x, y]] for x, y in zip(x_scatter, y_scatter)])
-        self.vlines.set_color(colors)
-        
-        # Update 3D scatter plot by appendinge new point to the list of scatter points
-        
-        if self.m == 3:
-            self.scatter_points_3d.append([y1, y2, y3])
-        elif self.m == 2:
-            self.scatter_points_3d.append([y1, y2, 0])
-        elif self.m == 1:
-            self.scatter_points_3d.append([y1, 0, 0]) 
-            
-        # Clear the previous scatter plot and redraw with all points
-        self.ax3.clear()
-        self.ax3.scatter(*zip(*self.scatter_points_3d))
+def find_local_minima_ami(time_series, max_delay):
+    ami_values = compute_ami(time_series, max_delay)
+    
+    # Find local minima indices
+    local_minima_indices = (np.diff(np.sign(np.diff(ami_values))) > 0).nonzero()[0] + 1
+    local_minima_values = ami_values[local_minima_indices]
+    
+    return local_minima_indices, local_minima_values, ami_values
 
-        # Update annotations
-        for i, (x, y) in enumerate(zip(x_scatter, y_scatter)):
-            if i < self.m:
-                self.annotations[i].set_text(f'y{i+1}')
-                self.annotations[i].xy = (x, y)
-                self.annotations[i].set_visible(True)
-                # Set the position, text, visibility, etc. for each annotation
-            else:
-                self.annotations[i].set_visible(False)
-        
-         # Return a list of artists to be redrawn
-        return self.scatter, self.vlines, self.scatter3d, *self.annotations
-    
-    
-    def reset_anim(self):
-        # Reset the animation when interacting with the widgets
-        self.t = 0
-        # self.pause_anim()
-        # double check that we Clear scatter points and reset annotations
+def compute_derivative(values):
+    """Compute the derivative of a numpy array."""
+    return np.gradient(values, edge_order=2)
 
-        self.scatter.set_offsets([])
-        self.scatter3d.set_data_3d([], [], [])
+def find_optimal_delay(local_minima_indices, derivative_adaf):
+    for index in local_minima_indices:
+        if index < len(derivative_adaf) and derivative_adaf[index] < 0:
+            return index  # Return the index where the first local minimum has a decreasing derivative of ADAF
+    return None  # Return None if no such index is found
 
-        self.total_frames = self.calculate_total_frames()  # Recalculate total frames
-        self.ani = FuncAnimation(self.fig, self.update, frames=self.total_frames,
-                                interval=1000, init_func=self.init_plot, blit=False, repeat=True)
-       
-    def restart_anim(self):
-        # Restart the animation after interaction
-        self.ani.event_source.start()
-    
-    def resume_anim(self):
-        # Restart the animation after interaction
-        self.ani.event_source.start()
-    
-    def pause_anim(self):
-        # Pause the animation
-        self.ani.event_source.stop()
-    
-    def update_delta_t(self, change):
-        # Update delta_t based on the slider
-        self.delta_t = change.new
-        self.reset_anim()
-    
-    def update_m(self, change):
-        # Update m based on the slider
-        self.m = change.new
-        self.reset_anim()
-        
-    def calculate_total_frames(self):
-        # Calculate the last valid start index for t
-        # This index is the one that allows the last y value to be the last point in sine_wave
-        last_valid_start = len(self.sine_wave) - (self.m - 1) * self.delta_t * self.scaling_factor
-        
-        # Calculate the total number of frames
-        # Divide by the step size and add one to account for the first frame
-        total_frames = last_valid_start // (self.scaling_factor) + 1
-        self.total_frames = total_frames
-        return total_frames
-    
-    def dynamic_annotation(self, i, x, y):
-        """ Dynamically place annotations based on the y-value and slope """
-        
-        # Calculate slope of the sine wave at x
-        slope = np.cos(2 * np.pi * self.frequency * x / self.T)
-        angle = np.arctan(slope) * 180 / np.pi
-        
-        # Adjust position based on the slope and y-value
-        offset_x = 0.15 * np.cos(angle)
-        offset_y = 0.15 * np.sin(angle)
-        if y > 0 and slope > 0:
-            # Annotations on the right for positive slope and positive y
-            ha, va = 'left', 'bottom'
-        
-        elif y > 0:
-            # Annotations on the left for negative slope and positive y
-            ha, va = 'right', 'top'
-        elif slope > 0:
-            # Annotations on the left for positive slope and negative y
-            ha, va = 'right', 'bottom'
-        elif y == 1:
-            offset_x, offset_y = 0, 0.15 # override offset
-            ha, va = 'left', 'top'
-        elif y == -1:
-            offset_x, offset_y = 0, -0.15 # override offset
-            ha, va = 'left', 'bottom'
+def optimal_delay_ami(time_series, max_delay=100, plot=False):
+    """Find the optimal time delay using the first local minimum of AMI."""
+
+    local_minima_indices, local_minima_values, ami_values = find_local_minima_ami(time_series, max_delay)
+    optimal_delay_index = find_optimal_delay(local_minima_indices, derivative_adaf)
+    if optimal_delay_index is not None:
+        print(f'Optimal time delay: {optimal_delay_index + 1}')  # Adding 1 because delay starts from 1
+        min_delay = optimal_delay_index + 1
+    else:
+        if len(local_minima_indices) > 1:
+            print(f'No optimal time delay found with the given criteria... using first local minima: {local_minima_indices[0]}')
+            min_delay = local_minima_indices[0]
         else:
-            # Annotations on the right for negative slope and negative y
-            ha, va = 'left', 'top'
+            print(f'No optimal time delay found with the given criteria... using global minimum: {np.argmin(ami_values) + 1}')
+            min_delay = np.argmin(ami_values) + 1  # Fallback to global minimum if no local minimum is found
         
-        self.annotations[i].set_x(x + offset_x)
-        self.annotations[i].set_y(y + offset_y)
-        self.annotations[i].set_ha(ha)
-        self.annotations[i].set_va(va)
+    if plot:
+        import matplotlib.pyplot as plt
+        plt.figure(figsize=(10, 5))
+        plt.plot(range(1, max_delay + 1), ami_values, marker='o')
+        plt.axvline(x=min_delay, color='r', linestyle='--', label=f'Optimal delay: {min_delay}')
+        plt.xlabel('Delay')
+        plt.ylabel('Average Mutual Information')
+        plt.title('Average Mutual Information vs Delay')
+        plt.legend()
+        plt.grid(True)
+        plt.show()
     
-    def create_widgets(self):
-        # Create and setup ipywidgets for delta_t and m
-        self.delta_t_slider = widgets.IntSlider(min=2, max=20, value=self.delta_t, description='Delta T:')
-        self.m_slider = widgets.IntSlider(min=1, max=3, value=self.m, description='M:')
-        display(self.delta_t_slider, self.m_slider)
+    return min_delay
+
+def plot_acf(time_series, nlags=100):
+    # Compute the autocorrelation function
+    acf_values = acf(time_series, nlags=nlags)
     
-    def connect_events(self):
-        # Attach event handlers to the widgets
-        self.delta_t_slider.observe(self.update_delta_t, names='value')
-        self.m_slider.observe(self.update_m, names='value')
-        
-         # ipywidget events
-#         self.d1 = ipyevents.Event(source=self.delta_t_slider, watched_events=['mouseup', 'mousedown'], wait=500, throttle_or_debounce='debounce')
-#         self.d2 = ipyevents.Event(source=self.m_slider, watched_events=['mouseup', 'mousedown'], wait=500, throttle_or_debounce='debounce')
-        # self.d3 = ipyevents.Event(source=self.show_trest, watched_events=['mouseup', 'mousedown'], wait=500, throttle_or_debounce='debounce')
+    # Find the first zero crossing
+    first_zero = np.where(acf_values < 0)[0][0] if any(acf_values < 0) else len(acf_values)
+    print(f'First zero in ACF: {first_zero}')
+    
+    # Find the autocorrelation time (decay to 1/e)
+    autocorr_time = np.where(acf_values < 1/np.e)[0][0] if any(acf_values < 1/np.e) else len(acf_values)
+    print(f'ACF time: {autocorr_time}')
+    
+    # Plot the ACF
+    plt.figure(figsize=(10, 5))
+    plt.plot(acf_values, marker='o', linestyle='-', label='ACF')
+    plt.axvline(x=first_zero, color='r', linestyle='--', label='First Zero Crossing')
+    plt.axvline(x=autocorr_time, color='g', linestyle='--', label='Autocorrelation Time (1/e decay)')
+    plt.xlabel('Lag')
+    plt.ylabel('Autocorrelation')
+    plt.title('Autocorrelation Function')
+    plt.legend()
+    plt.grid(True)
+    plt.show()
 
-        # connect events to DOM event handler
-        for event in [self.d1, self.d2]: event.on_dom_event(self.toggle_pause)
-        
-        
-        # bind pause_anim to mouse clicks
-        self.fig.canvas.mpl_connect('button_press_event', pause_anim)
+def compute_adaf(time_series, max_delay):
+    """Compute ADAF values for different time delays."""
+    adaf_values = []
+    for delay in range(1, max_delay + 1):
+        distances = []
+        for i in range(len(time_series) - delay):
+            distance = np.abs(i - (i + delay))
+            distances.append(distance)
+        adaf_values.append(np.mean(distances))
+    return np.array(adaf_values)
 
-    def toggle_pause(self, event):
-        """ Event handler for widget interaction / DOM callbacks."""  
-        
-         # once user clicks down on a widget for interaction, pause animation
-        if event['type'] == 'mousedown': 
-            self.pause_anim()
-        # resume animation on mouse release
-        elif event['type'] == 'mouseup': 
-            self.resume_anim()
+def compute_derivative_adaf(adaf_values):
+    """Compute the derivative of the ADAF values."""
+    derivative_adaf = np.diff(adaf_values)
+    return derivative_adaf
+
+def find_first_local_minimum(ami_values):
+    """Find the first local minimum in the average mutual information values."""
+    for i in range(1, len(ami_values) - 1):
+        if ami_values[i] < ami_values[i - 1] and ami_values[i] < ami_values[i + 1]:
+            return i  # Return the delay corresponding to the first local minimum
+    return None  # Return None if no local minimum is found
+
+def false_nearest_neighbors(time_series, max_dim, delay, rt):
+    def embed(series, dim, tau):
+        """Embed the time series."""
+        N = len(series)
+        embedded = np.empty((N - (dim - 1) * tau, dim))
+        for i in range(dim):
+            embedded[:, i] = series[i * tau:N - (dim - 1) * tau + i * tau]
+        return embedded
+    
+    def find_nearest_neighbor(embedded, index):
+        """Find the nearest neighbor of a point, excluding itself."""
+        distances = np.linalg.norm(embedded - embedded[index], axis=1)
+        distances[index] = np.inf  # Exclude the point itself
+        return np.argmin(distances), np.min(distances)
+
+    fnn_ratio = []
+    for dim in range(1, max_dim + 1):
+        embedded = embed(time_series, dim, delay)
+        false_neighbors = 0
+        for i in range(embedded.shape[0] - delay):  # Exclude last points which do not have a future value
+            neighbor_index, neighbor_distance = find_nearest_neighbor(embedded, i)
+            if neighbor_index + delay < embedded.shape[0]:  # Check if future index is in bounds
+                next_future_value = time_series[neighbor_index + delay * dim]
+                current_future_value = time_series[i + delay * dim]
+                distance_increase = abs(next_future_value - current_future_value)
+                if distance_increase > rt * neighbor_distance:
+                    false_neighbors += 1
+
+        # The ratio of false neighbors to total points considered
+        fnn_ratio.append(false_neighbors / (len(time_series) - (dim - 1) * delay))
+
+    return fnn_ratio
+
+
+def false_nearest_neighbors(time_series, max_dim, delay, rt):
+    def embed(series, dim, tau):
+        """Embed the time series."""
+        N = len(series)
+        embedded = np.empty((N - (dim - 1) * tau, dim))
+        for i in range(dim):
+            embedded[:, i] = series[i * tau:N - (dim - 1) * tau + i * tau]
+        return embedded
+    
+    def find_nearest_neighbor(embedded, index):
+        """Find the nearest neighbor of a point, excluding itself."""
+        distances = np.linalg.norm(embedded - embedded[index], axis=1)
+        distances[index] = np.inf  # Exclude the point itself
+        return np.argmin(distances), np.min(distances)
+
+    fnn_ratio = []
+    for dim in range(1, max_dim + 1):
+        embedded = embed(time_series, dim, delay)
+        false_neighbors = 0
+        for i in range(embedded.shape[0] - delay):  # Exclude last points which do not have a future value
+            neighbor_index, neighbor_distance = find_nearest_neighbor(embedded, i)
+            if neighbor_index + delay < embedded.shape[0]:  # Check if future index is in bounds
+                next_future_value = time_series[neighbor_index + delay * dim]
+                current_future_value = time_series[i + delay * dim]
+                distance_increase = abs(next_future_value - current_future_value)
+                if distance_increase > rt * neighbor_distance:
+                    false_neighbors += 1
+
+        # The ratio of false neighbors to total points considered
+        fnn_ratio.append(false_neighbors / (len(time_series) - (dim - 1) * delay))
+
+    return fnn_ratio

@@ -128,6 +128,80 @@ def find_epsilon(time_series_data, target_recurrence_rate, tau=1, dim=1, theiler
     
     return current_epsilon  # Return the best approximation of epsilon after max_iterations
 
+def get_RQA_significance(original_rqa_df, surrogates_rqa_df):
+    # Extract unique surrogate types
+    surrogate_types = surrogates_rqa_df.index.get_level_values('surrogate_type').unique()
+
+    # Initialize a DataFrame to hold the p-values
+    p_values_df = pd.DataFrame(index=surrogate_types, columns=original_rqa_df.columns)
+
+    # Vectorized computation of p-values for each surrogate type
+    for sur_type in surrogate_types:
+        # Filter the surrogates DataFrame for the current type
+        surrogates_of_type = surrogates_rqa_df.xs(sur_type, level='surrogate_type').to_numpy()
+
+        # Get the original metrics as a NumPy array
+        original_metrics = original_rqa_df.to_numpy()
+
+        # Assuming larger values are better, adjust if necessary
+        # Vectorized comparison to count surrogates with more extreme values
+        count_extreme_values = np.sum(surrogates_of_type >= original_metrics, axis=0)
+
+        # Calculate p-values and assign to the appropriate row in the p-values DataFrame
+        p_values_df.loc[sur_type] = count_extreme_values / surrogates_of_type.shape[0]
+
+    return p_values_df
+
+
+def test_significance(original_series, tau, dim, surrogates, rqa_measure_func, lag_of_interest):
+    # Compute the RQA measure for the original series
+    original_measure = rqa_measure_func(original_series, tau, dim, lag_of_interest)
+
+    # Prepare a partial function that already includes the static arguments
+    partial_compute_measure = partial(compute_measure, rqa_measure_func=rqa_measure_func, tau=tau, dim=dim, lag_of_interest=lag_of_interest)
+
+    # Compute measures in parallel using ThreadPoolExecutor
+    with ThreadPoolExecutor() as executor:
+        # Since the partial function already includes the static arguments, only surrogates need to be passed
+        surrogate_measures = list(executor.map(partial_compute_measure, surrogates))
+
+    # Calculate the empirical p-value (one-tailed test)
+    extreme_high_count = np.sum(np.array(surrogate_measures) >= original_measure)
+    p_value = extreme_high_count / len(surrogates)
+
+    return p_value, surrogate_measures
+
+def interpret_pvals(pvals_df):
+    # Define the significance thresholds with confidence levels
+    significance_thresholds = {
+        "Significant": {"threshold": 0.05, "confidence": "95%"},
+        "Moderately significant": {"threshold": 0.1, "confidence": "90%"},
+        "Not significant": {"threshold": float('inf'), "confidence": ""}
+    }
+    
+    # Iterate over each RQA metric column in the DataFrame
+    for metric in pvals_df.columns:
+        # Initialize a dictionary to hold surrogate types for each significance level
+        significance_results = {sig: [] for sig in significance_thresholds.keys()}
+        
+        # Go through each surrogate type and its p-value
+        for surrogate_type, p_value in pvals_df[metric].items():
+            # Determine the significance level of the p-value
+            for sig, info in significance_thresholds.items():
+                if p_value < info["threshold"]:
+                    formatted_surrogate_type = surrogate_type.replace("_", " ").title()
+                    significance_results[sig].append(formatted_surrogate_type)
+                    break  # Break after assigning to the first matching threshold
+
+        # Print the results for the current metric
+        print(f"\n{metric}:")
+        for sig, surrogates in significance_results.items():
+            if surrogates:  # Only print if there are surrogates at this significance level
+                confidence = significance_thresholds[sig]["confidence"]
+                # Only add confidence level if it is not empty
+                confidence_str = f" ({confidence} confidence)" if confidence else ""
+                print(f"    {sig} against {', '.join(surrogates)}{confidence_str}")
+                
 if __name__ == "__main__":
     start = time()
     df = pd.read_csv('1ES_binned_lc.csv')
